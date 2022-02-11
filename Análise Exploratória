@@ -1,0 +1,3025 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "fn4ZFLNl1Cip"
+      },
+      "source": [
+        "## Parte 1 - Análise Exploratória de Dados - Exercícios\n",
+        "\n",
+        "\n",
+        "--- \n",
+        "<img align=\"center\" width=\"150\" src=\"https://logodownload.org/wp-content/uploads/2017/05/ifood-logo-0.png\">\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "zFkVT7Rr1Ciq"
+      },
+      "source": [
+        "### Acessando as bases"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "1LvkWVni1Ciq",
+        "outputId": "36bd22cf-5bb5-4b5a-d890-dfe63d19fce2"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Drive already mounted at /content/drive; to attempt to forcibly remount, call drive.mount(\"/content/drive\", force_remount=True).\n"
+          ]
+        }
+      ],
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/content/drive')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "wSkkWcEx1Ciu"
+      },
+      "outputs": [],
+      "source": [
+        "import pandas as pd"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "ImRlnR8pytbh"
+      },
+      "outputs": [],
+      "source": [
+        "# Fixa em duas casas decimais a visualização do float\n",
+        "pd.options.display.float_format = '{:.2f}'.format"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "BFUqf3Ue1Ciw"
+      },
+      "source": [
+        "### Segementação de clientes - `customer_segmentation`"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "XVWRnE6PqSVV"
+      },
+      "outputs": [],
+      "source": [
+        "pasta_raiz = '/content/drive/MyDrive/datasets/ifood'"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "Tu-OOsgg1Cix"
+      },
+      "outputs": [],
+      "source": [
+        "df_customer_segmentation = pd.read_csv(f'{pasta_raiz}/df_customer_segmentation.csv', sep=';')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 199
+        },
+        "id": "RyvVo-l81Ciy",
+        "outputId": "7e1108ee-e28d-4762-f1dd-3b423c3f5f83",
+        "scrolled": true
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>customer_id</th>\n",
+              "      <th>segmentation_month</th>\n",
+              "      <th>ifood_status_last_month</th>\n",
+              "      <th>ifood_status</th>\n",
+              "      <th>orders_last_91d</th>\n",
+              "      <th>qtt_orders_last_year</th>\n",
+              "      <th>qtt_valid_orders</th>\n",
+              "      <th>last_valid_order_date</th>\n",
+              "      <th>qtt_invalid_orders</th>\n",
+              "      <th>last_invalid_order_date</th>\n",
+              "      <th>marlin_tag</th>\n",
+              "      <th>recency_months</th>\n",
+              "      <th>last_nps</th>\n",
+              "      <th>registration_date</th>\n",
+              "      <th>customer_lifetime_days</th>\n",
+              "      <th>customer_lifetime_months</th>\n",
+              "      <th>top_3_merchants_code</th>\n",
+              "      <th>was_mub_last_month</th>\n",
+              "      <th>buyer_last_91d</th>\n",
+              "      <th>top_city</th>\n",
+              "      <th>top_district</th>\n",
+              "      <th>top_centroid_id</th>\n",
+              "      <th>first_order_date</th>\n",
+              "      <th>last_order_date</th>\n",
+              "      <th>days_to_reorder_at_datasource</th>\n",
+              "      <th>days_to_reorder_at_concluded</th>\n",
+              "      <th>rfv_score</th>\n",
+              "      <th>recency_days</th>\n",
+              "      <th>recency_days_bucket</th>\n",
+              "      <th>recency_days_bucket_description</th>\n",
+              "      <th>freq_last_91d</th>\n",
+              "      <th>freq_last_91d_bucket</th>\n",
+              "      <th>freq_last_91d_bucket_description</th>\n",
+              "      <th>avg_aov_last_91d</th>\n",
+              "      <th>maturity_orders</th>\n",
+              "      <th>maturity_orders_bucket</th>\n",
+              "      <th>maturity_orders_bucket_description</th>\n",
+              "      <th>benefits_sensitivity</th>\n",
+              "      <th>benefits_sensitivity_bucket</th>\n",
+              "      <th>preferred_shift_bucket</th>\n",
+              "      <th>preferred_shift_bucket_description</th>\n",
+              "      <th>merchant_variety</th>\n",
+              "      <th>merchant_variety_bucket</th>\n",
+              "      <th>merchant_offer</th>\n",
+              "      <th>merchant_offer_bucket</th>\n",
+              "      <th>merchant_offer_bucket_description</th>\n",
+              "      <th>top_dish_bucket</th>\n",
+              "      <th>top_dish_bucket_description</th>\n",
+              "      <th>preferred_dishes</th>\n",
+              "      <th>preferred_dishes_code</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>6677d5e78e4627cf80ae3ea3281869183c946c366efc43...</td>\n",
+              "      <td>2019-10-01</td>\n",
+              "      <td>Inactive</td>\n",
+              "      <td>Inactive</td>\n",
+              "      <td>9.00</td>\n",
+              "      <td>32</td>\n",
+              "      <td>49</td>\n",
+              "      <td>2019-07-30</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2019-02-18</td>\n",
+              "      <td>4. Retention Carp</td>\n",
+              "      <td>3.06</td>\n",
+              "      <td>Promoter</td>\n",
+              "      <td>2018-03-20T18:39:45.094Z</td>\n",
+              "      <td>591</td>\n",
+              "      <td>19</td>\n",
+              "      <td>[\\\\d3e994ac-c883-4d00-a38f-4d7b86926c18\\\\\\,\\\\\\...</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>SAO PAULO</td>\n",
+              "      <td>Jardim Europa</td>\n",
+              "      <td>-23.58-46.68</td>\n",
+              "      <td>2018-03-20</td>\n",
+              "      <td>2019-07-30</td>\n",
+              "      <td>12.22</td>\n",
+              "      <td>12.22</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>94.00</td>\n",
+              "      <td>5.00</td>\n",
+              "      <td>5. &gt; 91d</td>\n",
+              "      <td>2.97</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>3. 2-4</td>\n",
+              "      <td>65.79</td>\n",
+              "      <td>49.00</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>4. 10-49</td>\n",
+              "      <td>0.89</td>\n",
+              "      <td>Alta</td>\n",
+              "      <td>5</td>\n",
+              "      <td>5. Jantar</td>\n",
+              "      <td>0.33</td>\n",
+              "      <td>Media</td>\n",
+              "      <td>5515.00</td>\n",
+              "      <td>5</td>\n",
+              "      <td>5. &gt; 500</td>\n",
+              "      <td>2</td>\n",
+              "      <td>2. Tem Cozinha Preferida</td>\n",
+              "      <td>[\\\\Pizza\\\\\\,\\\\\\\"Comida Chinesa\\\\\\\"]\\\"\"</td>\n",
+              "      <td>[\\\\CHI\\\\\\,\\\\\\\"PIZ\\\\\\\"]\\\"\"</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>5e57de756833068ca492f110539c987964b9d0e57219e2...</td>\n",
+              "      <td>2019-07-01</td>\n",
+              "      <td>Active</td>\n",
+              "      <td>Active</td>\n",
+              "      <td>15.00</td>\n",
+              "      <td>28</td>\n",
+              "      <td>39</td>\n",
+              "      <td>2019-07-27</td>\n",
+              "      <td>0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>1. Marlin</td>\n",
+              "      <td>0.10</td>\n",
+              "      <td>Promoter</td>\n",
+              "      <td>2016-04-07T17:50:02.000Z</td>\n",
+              "      <td>1209</td>\n",
+              "      <td>39</td>\n",
+              "      <td>[\\\\d8b01e5b-8ce2-437f-aacc-89f998d14656\\\\\\,\\\\\\...</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>RIO DE JANEIRO</td>\n",
+              "      <td>Cordovil</td>\n",
+              "      <td>-22.83-43.3</td>\n",
+              "      <td>2016-04-07</td>\n",
+              "      <td>2019-07-27</td>\n",
+              "      <td>6.47</td>\n",
+              "      <td>6.47</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1. &lt; 7d</td>\n",
+              "      <td>4.95</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>4. 4-10</td>\n",
+              "      <td>63.85</td>\n",
+              "      <td>39.00</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>4. 10-49</td>\n",
+              "      <td>0.40</td>\n",
+              "      <td>Media</td>\n",
+              "      <td>5</td>\n",
+              "      <td>5. Jantar</td>\n",
+              "      <td>0.67</td>\n",
+              "      <td>Alta</td>\n",
+              "      <td>1062.00</td>\n",
+              "      <td>5</td>\n",
+              "      <td>5. &gt; 500</td>\n",
+              "      <td>3</td>\n",
+              "      <td>3. Mais de uma Cozinha Preferida</td>\n",
+              "      <td>[\\\\Comida Variada\\\\\\,\\\\\\\"Comida Brasileira\\\\\\\"...</td>\n",
+              "      <td>[\\\\BRA\\\\\\,\\\\\\\"LCH\\\\\\\",\\\\\\\"VAR\\\\\\\"]\\\"\"</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                                         customer_id  ...                  preferred_dishes_code\n",
+              "0  6677d5e78e4627cf80ae3ea3281869183c946c366efc43...  ...              [\\\\CHI\\\\\\,\\\\\\\"PIZ\\\\\\\"]\\\"\"\n",
+              "1  5e57de756833068ca492f110539c987964b9d0e57219e2...  ...  [\\\\BRA\\\\\\,\\\\\\\"LCH\\\\\\\",\\\\\\\"VAR\\\\\\\"]\\\"\"\n",
+              "\n",
+              "[2 rows x 50 columns]"
+            ]
+          },
+          "execution_count": 235,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "df_customer_segmentation.head(2)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "PnfZo4fC1Ci1"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(0.5 ponto)</span> `Q1` Quantas linhas e colunas existem no conjunto de dados?**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "IshytOXwkwP1",
+        "outputId": "d92722f3-4c67-49ec-8c1a-bd19b4873817"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "linhas: 210364\n",
+            "colunas: 50\n"
+          ]
+        }
+      ],
+      "source": [
+        "df_customer_segmentation.shape\n",
+        "print('linhas:', df_customer_segmentation.shape[0])\n",
+        "print('colunas:', df_customer_segmentation.shape[1])"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "wQiOTobToZ91"
+      },
+      "source": [
+        "Existem 210364 linhas e 50 colunas."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Ux9SGon31Ci3"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(0.5 ponto)</span> `Q2` Quantos clientes únicos existem?**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "27w6775xkxDD",
+        "outputId": "ef56e686-19a8-4d20-dcb2-4560b62d2c3e"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "clientes unicos: 30079\n"
+          ]
+        }
+      ],
+      "source": [
+        "print('clientes unicos:', len(df_customer_segmentation.customer_id.unique()))\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "AmC_TlkhtXdP"
+      },
+      "source": [
+        "Existem 30079 clientes unicos."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "B6N5O9Rq1Ci6"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(1 ponto)</span> `Q3` Quais são os 10 clientes que mais tiveram pedidos validos?**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 390
+        },
+        "id": "ES-4dajNktdx",
+        "outputId": "2722b94f-dd4e-49c2-ea31-a291bf0c0f9f"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>total_qtt_valid_orders</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>customer_id</th>\n",
+              "      <th></th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>a46bb1905790aa86717354934e2b4015c4ae157ed5b08c0a433e940547733c68</th>\n",
+              "      <td>1297</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9f1a9d1636dff802b65c687d37583c88f263b239ff889273b08b67f6340c6877</th>\n",
+              "      <td>1200</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>27b0b3fbf967199f757bf36f5376b20d63c6f0ad8da241755610664cf9d7125e</th>\n",
+              "      <td>1171</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>f1c5397923a646872f8385f296f9e0b66e2b0f095dcb53da7e939f0e8fc28f5a</th>\n",
+              "      <td>1110</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>c932ef421caf7076a16cb7472d4fddee9a403a304d3b1ec7100c5c32d1719140</th>\n",
+              "      <td>1046</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>29efe6f1697579b147d7bc37c6ae2a3ebdc90546a5c926f84652c0a0e1554d88</th>\n",
+              "      <td>950</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>902ea307b3bcc41cf6d75162ed01d91516542ece0839f9326faff5f5b5fd2435</th>\n",
+              "      <td>936</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>907404f63c230df86415085b09a45956fba84b973acbed6103995d6afdf0d8c3</th>\n",
+              "      <td>928</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>188eaac6edd1ee23f112f99c04c3c3542a56a140ea0b13351028701ff8de6116</th>\n",
+              "      <td>926</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>8a7b0322a4b0f435f69e9135ccbc3560c360c4f9ec4ec3cfd7260f9a15b2f0ed</th>\n",
+              "      <td>851</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                                                    total_qtt_valid_orders\n",
+              "customer_id                                                               \n",
+              "a46bb1905790aa86717354934e2b4015c4ae157ed5b08c0...                    1297\n",
+              "9f1a9d1636dff802b65c687d37583c88f263b239ff88927...                    1200\n",
+              "27b0b3fbf967199f757bf36f5376b20d63c6f0ad8da2417...                    1171\n",
+              "f1c5397923a646872f8385f296f9e0b66e2b0f095dcb53d...                    1110\n",
+              "c932ef421caf7076a16cb7472d4fddee9a403a304d3b1ec...                    1046\n",
+              "29efe6f1697579b147d7bc37c6ae2a3ebdc90546a5c926f...                     950\n",
+              "902ea307b3bcc41cf6d75162ed01d91516542ece0839f93...                     936\n",
+              "907404f63c230df86415085b09a45956fba84b973acbed6...                     928\n",
+              "188eaac6edd1ee23f112f99c04c3c3542a56a140ea0b133...                     926\n",
+              "8a7b0322a4b0f435f69e9135ccbc3560c360c4f9ec4ec3c...                     851"
+            ]
+          },
+          "execution_count": 238,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "(\n",
+        "    df_customer_segmentation\n",
+        "    .groupby('customer_id')\n",
+        "    .agg(total_qtt_valid_orders = ('qtt_valid_orders', 'max'))\n",
+        "    .nlargest(10, 'total_qtt_valid_orders')\n",
+        ")\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "ZB-9I05D1Ci8"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(1 ponto)</span> `Q4` Qual é o id do cliente mais antigo na plataforma? Existe apenas 1?**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "S9mStqgRkuPp",
+        "outputId": "2f588a05-97f3-498d-8224-3824407e78dc"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "['07ed1b37689de6ea41fe8ca7a42129830593633ef0d058df720522b575316aea',\n",
+              " '68180a00c9b111d93b9c7095fd545a187d871877d01080d506f7451594963918']"
+            ]
+          },
+          "execution_count": 239,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "(\n",
+        "    df_customer_segmentation\n",
+        "    .groupby('customer_id')\n",
+        "    .agg(\n",
+        "        data_registration_date = ('registration_date', 'first')\n",
+        "        )\n",
+        "    .sort_values('data_registration_date').head(2)\n",
+        "    .reset_index()\n",
+        "    ).customer_id.to_list()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "YC73Bnyex2va"
+      },
+      "source": [
+        "Existem 2 clientes antigos."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "2sxsxdrc1Ci-"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(1 ponto)</span> `Q5` Quais são os três meses que contém mais clientes `Inactive`?** Utilize a coluna `segmentation_month`."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 173
+        },
+        "id": "N01z-VhXkvJJ",
+        "outputId": "b3862e08-7c8c-42fd-d528-d154141df909"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>customer_id</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>segmentation_month</th>\n",
+              "      <th></th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>2019-10-01</th>\n",
+              "      <td>13309</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2019-12-01</th>\n",
+              "      <td>10414</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2019-11-01</th>\n",
+              "      <td>10202</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                    customer_id\n",
+              "segmentation_month             \n",
+              "2019-10-01                13309\n",
+              "2019-12-01                10414\n",
+              "2019-11-01                10202"
+            ]
+          },
+          "execution_count": 240,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "( \n",
+        "    df_customer_segmentation\n",
+        "    .query('ifood_status == \"Inactive\"')\n",
+        "    .groupby('segmentation_month')[['customer_id']].count()\n",
+        "    .nlargest(3, 'customer_id')\n",
+        ")"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "T15p1krg1Ci_"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(3 pontos)</span> `Q6` Quais são os 5 pratos mais preferidos do cliente do tipo Marlin?**\n",
+        "\n",
+        "Será necessário criar uma função chamada `recuperar_preferred_dishes` para recuperar corretamente os dados. Essa função deve retornar uma lista com os pratos preferidos.\n",
+        "\n",
+        "ATENÇÃO - Considere um único tipo de prato por cliente, por exemplo, o cliente com id 1a2b3c4d5e tem 6 vezes comida brasileira, deverá ser considerado como apenas 1."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "iHYV-RobO_ry",
+        "outputId": "291aabf8-a14c-4c8a-e7dc-3c72e61be4c7"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "array(['4. Retention Carp', '1. Marlin', '2. Tilapia', '3. Subsidy Carp',\n",
+              "       nan], dtype=object)"
+            ]
+          },
+          "execution_count": 241,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "df_customer_segmentation.marlin_tag.unique()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "0QvoqXGH1CjA"
+      },
+      "outputs": [],
+      "source": [
+        "def recuperar_preferred_dishes(pratos):\n",
+        "    aux = pratos.replace('[', '').replace(']', '').replace('\\\\', '').replace('\"', '').replace(\"'\", '')\n",
+        "    return aux.split(',')"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "9Rw18NKFVM-z"
+      },
+      "source": [
+        "Testando a função"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "vm0DE51G1CjC",
+        "outputId": "c9653751-d32a-4025-fa5e-77408be13d27"
+      },
+      "outputs": [
+        {
+          "data": {
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            },
+            "text/plain": [
+              "'[\\\\\\\\Pizza\\\\\\\\\\\\,\\\\\\\\\\\\\"Comida Chinesa\\\\\\\\\\\\\"]\\\\\"\"'"
+            ]
+          },
+          "execution_count": 243,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "df_customer_segmentation.loc[0, 'preferred_dishes']"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "QlzXZZfA1CjD",
+        "outputId": "8622a1f5-1e59-4465-bead-d1bcfa74cd2a"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "['Pizza', 'Comida Chinesa']"
+            ]
+          },
+          "execution_count": 244,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "recuperar_preferred_dishes(df_customer_segmentation.loc[0, 'preferred_dishes'])"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "4rtwilEotFLm",
+        "outputId": "c0cb1af4-8543-4b7a-be1e-fb5a9133b03d"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "pratos\n",
+              "Lanches              10996\n",
+              "Pizza                 8873\n",
+              "Comida Brasileira     7848\n",
+              "Comida Japonesa       4278\n",
+              "Comida Saudável       2239\n",
+              "dtype: int64"
+            ]
+          },
+          "execution_count": 245,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "(\n",
+        "    df_customer_segmentation\n",
+        "    .query(\"marlin_tag == '1. Marlin'\")\n",
+        "    .filter(['customer_id', 'marlin_tag', 'preferred_dishes'])\n",
+        "    .assign(pratos = lambda df_em_memoria: df_em_memoria.preferred_dishes.apply(recuperar_preferred_dishes))\n",
+        "    .explode('pratos')\n",
+        "    .groupby(['customer_id', 'pratos']).agg(total_pratos_por_cliente = ('pratos', 'count'))\n",
+        "    .reset_index()\n",
+        "    .value_counts('pratos')\n",
+        ").head(5)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Q9_wZ71y1CjU"
+      },
+      "source": [
+        "### Pedidos - `orders`"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "63H33Xqe1CjU"
+      },
+      "outputs": [],
+      "source": [
+        "df_orders = pd.read_csv(f'{pasta_raiz}/df_orders.csv', sep=',')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 233
+        },
+        "id": "X2d7bknU1CjY",
+        "outputId": "e6cfe67d-f129-45ff-a946-a2a23d563b11",
+        "scrolled": true
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>order_id</th>\n",
+              "      <th>order_number</th>\n",
+              "      <th>order_timestamp_local</th>\n",
+              "      <th>order_shift</th>\n",
+              "      <th>last_status_date_local</th>\n",
+              "      <th>order_total</th>\n",
+              "      <th>credit</th>\n",
+              "      <th>paid_amount</th>\n",
+              "      <th>delivery_type</th>\n",
+              "      <th>scheduled</th>\n",
+              "      <th>scheduled_creation_date_local</th>\n",
+              "      <th>device_app_version</th>\n",
+              "      <th>device_type</th>\n",
+              "      <th>device_platform</th>\n",
+              "      <th>payment_method</th>\n",
+              "      <th>customer_state_label</th>\n",
+              "      <th>customer_city</th>\n",
+              "      <th>customer_district</th>\n",
+              "      <th>customer_centroid_id</th>\n",
+              "      <th>customer_has_plus</th>\n",
+              "      <th>customer_seg_status_last_month</th>\n",
+              "      <th>customer_seg_recency_bucket</th>\n",
+              "      <th>customer_seg_frequency_bucket</th>\n",
+              "      <th>customer_seg_merchant_offer_bucket</th>\n",
+              "      <th>customer_seg_benefits_sensitivity_bucket</th>\n",
+              "      <th>customer_seg_marlin_tag</th>\n",
+              "      <th>customer_seg_gross_income_bucket</th>\n",
+              "      <th>customer_seg_preferred_shift</th>\n",
+              "      <th>frn_id</th>\n",
+              "      <th>merchant_city</th>\n",
+              "      <th>merchant_district</th>\n",
+              "      <th>merchant_centroid_id</th>\n",
+              "      <th>merchant_dish_type</th>\n",
+              "      <th>distance_merchant_customer</th>\n",
+              "      <th>promo_is_promotion</th>\n",
+              "      <th>normal_items_quantity</th>\n",
+              "      <th>promo_items_quantity</th>\n",
+              "      <th>order_lag_at_login</th>\n",
+              "      <th>order_lead_at_login</th>\n",
+              "      <th>order_date_local</th>\n",
+              "      <th>valid_order</th>\n",
+              "      <th>session_id</th>\n",
+              "      <th>customer_id</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>630e2af0-b456-4b3a-b964-4d66ce5cc5df</td>\n",
+              "      <td>1290139943</td>\n",
+              "      <td>2019-12-11T13:22:06.497Z</td>\n",
+              "      <td>weekday lunch</td>\n",
+              "      <td>2019-12-11T15:22:39.156Z</td>\n",
+              "      <td>28.90</td>\n",
+              "      <td>14.00</td>\n",
+              "      <td>24.90</td>\n",
+              "      <td>DELIVERY</td>\n",
+              "      <td>False</td>\n",
+              "      <td>2019-12-11T13:22:06.497Z</td>\n",
+              "      <td>9.29.1</td>\n",
+              "      <td>MOBILE</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>CC_ONLINE</td>\n",
+              "      <td>RN</td>\n",
+              "      <td>PARNAMIRIM</td>\n",
+              "      <td>NOVA PARNAMIRIM</td>\n",
+              "      <td>-5.89-35.2</td>\n",
+              "      <td>False</td>\n",
+              "      <td>Active</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>5.00</td>\n",
+              "      <td>5.00</td>\n",
+              "      <td>Alta</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>6.00</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>43583</td>\n",
+              "      <td>NATAL</td>\n",
+              "      <td>PONTA NEGRA</td>\n",
+              "      <td>-5.87-35.18</td>\n",
+              "      <td>Comida Brasileira</td>\n",
+              "      <td>2722.60</td>\n",
+              "      <td>0.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>0.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>2019-12-11T00:00:00.000Z</td>\n",
+              "      <td>1</td>\n",
+              "      <td>ccbcf9e2-3728-4458-a813-4031ae22e4bd</td>\n",
+              "      <td>48b6d81407646ca61163f064a426ce38ac08bed2ce84f0...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>66f8163d-f081-4fbd-adb8-cfbbff9213f7</td>\n",
+              "      <td>1141271215</td>\n",
+              "      <td>2019-11-06T17:57:17.967Z</td>\n",
+              "      <td>weekday dinner</td>\n",
+              "      <td>2019-11-06T18:18:48.680Z</td>\n",
+              "      <td>56.35</td>\n",
+              "      <td>7.90</td>\n",
+              "      <td>50.40</td>\n",
+              "      <td>DELIVERY</td>\n",
+              "      <td>False</td>\n",
+              "      <td>2019-11-06T17:57:17.967Z</td>\n",
+              "      <td>webapp_6.2.0</td>\n",
+              "      <td>SITE</td>\n",
+              "      <td>DESKTOP</td>\n",
+              "      <td>CC_ONLINE</td>\n",
+              "      <td>PR</td>\n",
+              "      <td>LONDRINA</td>\n",
+              "      <td>Gleba Fazenda Palhano</td>\n",
+              "      <td>-23.33-51.19</td>\n",
+              "      <td>False</td>\n",
+              "      <td>Active</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>5.00</td>\n",
+              "      <td>Media</td>\n",
+              "      <td>1. Marlin</td>\n",
+              "      <td>6.00</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>533415</td>\n",
+              "      <td>LONDRINA</td>\n",
+              "      <td>Gleba Fazenda Palhano</td>\n",
+              "      <td>-23.34-51.19</td>\n",
+              "      <td>Lanches</td>\n",
+              "      <td>1108.82</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>0.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>7.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>2019-11-06T00:00:00.000Z</td>\n",
+              "      <td>1</td>\n",
+              "      <td>d9e94d88-ca88-4997-ad4c-62b9c0a35c1b</td>\n",
+              "      <td>b3f74186880f5f9a79e0865ad8beab47e22b785b8b3bc0...</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                               order_id  ...                                        customer_id\n",
+              "0  630e2af0-b456-4b3a-b964-4d66ce5cc5df  ...  48b6d81407646ca61163f064a426ce38ac08bed2ce84f0...\n",
+              "1  66f8163d-f081-4fbd-adb8-cfbbff9213f7  ...  b3f74186880f5f9a79e0865ad8beab47e22b785b8b3bc0...\n",
+              "\n",
+              "[2 rows x 43 columns]"
+            ]
+          },
+          "execution_count": 247,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "df_orders.head(2)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "9ZQcm7IC1CjL"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(2 pontos)</span> `Q7` Quais os três bairros de São Paulo, onde o iFood mais vende pratos do tipo de Pizza?**\n",
+        "\n",
+        "Lembre-se de padronizar em minusculo ou maisculo a cidade, os bairros e os tipos de pratos. Utilize o DataFrame abaixo: `df_orders_exe7`."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "1nxtin4b1CjL"
+      },
+      "outputs": [],
+      "source": [
+        "df_orders_exe7 = df_orders[['customer_city', 'customer_district', 'merchant_dish_type']].copy()\n",
+        "df_orders_exe7.customer_city = df_orders_exe7.customer_city.str.lower()\n",
+        "df_orders_exe7.customer_district = df_orders_exe7.customer_district.str.lower()\n",
+        "df_orders_exe7.merchant_dish_type = df_orders_exe7.merchant_dish_type.str.lower()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "lLCiAfKI3j2f",
+        "outputId": "b1b2ebee-5f2f-46dd-d02b-3cb31d31aee0"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "customer_district\n",
+              "bela vista      590\n",
+              "perdizes        424\n",
+              "vila mariana    343\n",
+              "dtype: int64"
+            ]
+          },
+          "execution_count": 249,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "(\n",
+        "    df_orders_exe7\n",
+        "    .query('customer_city == \"sao paulo\" & merchant_dish_type == \"pizza\"')\n",
+        "    .value_counts('customer_district')\n",
+        ")[:3]"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "f4OGZtKf1Cja"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(1 ponto)</span> `Q8` Qual é o período do dia em que os pedidos são enviados com mais frequencia?**\n",
+        "\n",
+        "Considere o período sendo dinner, lunch, snack, dawn ou breakfast. Não importa se for dia de semana ou final de semana. Por exemplo: weekend dinner e weekday dinner devem ser considerados como dinner."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "idu9_2V61Cja",
+        "outputId": "401e0417-bbe6-4580-ea19-6e02795824eb"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "dinner       299501\n",
+              "lunch        151659\n",
+              "snack         27212\n",
+              "dawn          12117\n",
+              "breakfast      1649\n",
+              "Name: order_shift, dtype: int64"
+            ]
+          },
+          "execution_count": 250,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "df_orders['order_shift'].str.split(' ').str[-1].value_counts()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "7k1CLA1W1Cjd"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(1 pontos)</span> `Q9` Qual é a média de gastos, total de gastos e total de pedidos que os usuários das plataformas Android e iOS tiveram?**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 111
+        },
+        "id": "LvsUCVWu1Cjd",
+        "outputId": "a8007f85-0882-47cc-bbde-acb519dc54a5"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>device_platform</th>\n",
+              "      <th>media_gastos</th>\n",
+              "      <th>total_gastos</th>\n",
+              "      <th>total_pedidos</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>46.20</td>\n",
+              "      <td>12695977.01</td>\n",
+              "      <td>274822</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>IOS</td>\n",
+              "      <td>55.55</td>\n",
+              "      <td>11523010.28</td>\n",
+              "      <td>207432</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "  device_platform  media_gastos  total_gastos  total_pedidos\n",
+              "0         ANDROID         46.20   12695977.01         274822\n",
+              "1             IOS         55.55   11523010.28         207432"
+            ]
+          },
+          "execution_count": 251,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "(\n",
+        "        df_orders[df_orders.device_platform.isin(('ANDROID', 'IOS'))]\n",
+        "    .groupby('device_platform')\n",
+        "    .agg(\n",
+        "        media_gastos = ('paid_amount', 'mean'),\n",
+        "        total_gastos = ('paid_amount', 'sum'),\n",
+        "        total_pedidos = ('paid_amount', 'count'),\n",
+        "    )\n",
+        "    .reset_index()\n",
+        ")"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "LGe6qB_b1Cje"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(3 pontos)</span> `Q10` Quais foram os 10 pedidos que mais demoraram para serem entregues?** Utilize as variáveis `order_timestamp_local` e `last_status_date_local`.\n",
+        "\n",
+        "Lembre-se de converter as datas e horários corretamente."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "BODeiDR_1Cjf"
+      },
+      "outputs": [],
+      "source": [
+        "df_orders.order_timestamp_local = pd.to_datetime(df_orders.order_timestamp_local)\n",
+        "df_orders.last_status_date_local = pd.to_datetime(df_orders.last_status_date_local)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 419
+        },
+        "id": "vBplonLe1Cjg",
+        "outputId": "68255ca0-4b3d-42a1-c8a5-5f2ed25377dd"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>order_id</th>\n",
+              "      <th>order_timestamp_local</th>\n",
+              "      <th>last_status_date_local</th>\n",
+              "      <th>tempo_entrega</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>419905</th>\n",
+              "      <td>e99cc089-2996-4769-93e8-3faaa773e5e5</td>\n",
+              "      <td>2019-09-02 07:00:51.387000+00:00</td>\n",
+              "      <td>2019-09-03 11:40:03.458000+00:00</td>\n",
+              "      <td>1 days 04:39:12.071000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>245187</th>\n",
+              "      <td>a953e18c-00ac-4e3e-acc5-24e910095862</td>\n",
+              "      <td>2019-09-02 07:10:18.296000+00:00</td>\n",
+              "      <td>2019-09-03 11:40:03.517000+00:00</td>\n",
+              "      <td>1 days 04:29:45.221000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>145073</th>\n",
+              "      <td>aef131c0-e810-4c5e-b84e-9ce4a0220cfe</td>\n",
+              "      <td>2019-12-25 08:25:24.789000+00:00</td>\n",
+              "      <td>2019-12-26 12:36:40.753000+00:00</td>\n",
+              "      <td>1 days 04:11:15.964000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>290345</th>\n",
+              "      <td>5f489897-9ad1-4eff-831f-3617ee7d7c8a</td>\n",
+              "      <td>2019-12-25 08:55:16.099000+00:00</td>\n",
+              "      <td>2019-12-26 12:37:06.097000+00:00</td>\n",
+              "      <td>1 days 03:41:49.998000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>177797</th>\n",
+              "      <td>77aa64d0-2a12-4a71-a839-e54c5365cf8f</td>\n",
+              "      <td>2019-09-02 08:28:45.219000+00:00</td>\n",
+              "      <td>2019-09-03 11:40:15.497000+00:00</td>\n",
+              "      <td>1 days 03:11:30.278000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>278674</th>\n",
+              "      <td>34ef4842-6b27-41eb-8b75-10e2c720c45a</td>\n",
+              "      <td>2019-06-11 12:40:00+00:00</td>\n",
+              "      <td>2019-06-11 11:55:02.483000+00:00</td>\n",
+              "      <td>-1 days +23:15:02.483000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>193863</th>\n",
+              "      <td>83194aae-f6a7-4e3d-b148-870f52a6a980</td>\n",
+              "      <td>2019-06-28 12:40:00+00:00</td>\n",
+              "      <td>2019-06-28 11:53:56.720000+00:00</td>\n",
+              "      <td>-1 days +23:13:56.720000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>14036</th>\n",
+              "      <td>5c18ffa2-d0e6-46e0-b8e2-a0f1886a016f</td>\n",
+              "      <td>2019-06-14 12:40:00+00:00</td>\n",
+              "      <td>2019-06-14 11:53:34.185000+00:00</td>\n",
+              "      <td>-1 days +23:13:34.185000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>208939</th>\n",
+              "      <td>819a2459-e4f0-4bec-a438-43bde38a7513</td>\n",
+              "      <td>2019-06-12 12:40:00+00:00</td>\n",
+              "      <td>2019-06-12 11:53:28.799000+00:00</td>\n",
+              "      <td>-1 days +23:13:28.799000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>241889</th>\n",
+              "      <td>cb76b557-fcc5-438c-aa4a-055f3e43fff0</td>\n",
+              "      <td>2019-06-13 12:40:00+00:00</td>\n",
+              "      <td>2019-06-13 11:46:52.151000+00:00</td>\n",
+              "      <td>-1 days +23:06:52.151000</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>492138 rows × 4 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                                    order_id  ...            tempo_entrega\n",
+              "419905  e99cc089-2996-4769-93e8-3faaa773e5e5  ...   1 days 04:39:12.071000\n",
+              "245187  a953e18c-00ac-4e3e-acc5-24e910095862  ...   1 days 04:29:45.221000\n",
+              "145073  aef131c0-e810-4c5e-b84e-9ce4a0220cfe  ...   1 days 04:11:15.964000\n",
+              "290345  5f489897-9ad1-4eff-831f-3617ee7d7c8a  ...   1 days 03:41:49.998000\n",
+              "177797  77aa64d0-2a12-4a71-a839-e54c5365cf8f  ...   1 days 03:11:30.278000\n",
+              "...                                      ...  ...                      ...\n",
+              "278674  34ef4842-6b27-41eb-8b75-10e2c720c45a  ... -1 days +23:15:02.483000\n",
+              "193863  83194aae-f6a7-4e3d-b148-870f52a6a980  ... -1 days +23:13:56.720000\n",
+              "14036   5c18ffa2-d0e6-46e0-b8e2-a0f1886a016f  ... -1 days +23:13:34.185000\n",
+              "208939  819a2459-e4f0-4bec-a438-43bde38a7513  ... -1 days +23:13:28.799000\n",
+              "241889  cb76b557-fcc5-438c-aa4a-055f3e43fff0  ... -1 days +23:06:52.151000\n",
+              "\n",
+              "[492138 rows x 4 columns]"
+            ]
+          },
+          "execution_count": 253,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "(\n",
+        "    df_orders\n",
+        "    .filter(['order_id', 'order_timestamp_local', 'last_status_date_local'])\n",
+        "    .assign(tempo_entrega = df_orders.last_status_date_local - df_orders.order_timestamp_local)\n",
+        "    .sort_values('tempo_entrega', ascending=False)\n",
+        ")"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "DjWRh9Vj1Cjm"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(3 pontos)</span> `Q11` Quais foram os valores minimo, máximo e médio gasto por todos os clientes durante os meses disponíveis na base?**\n",
+        "\n",
+        "Utilize a variável `order_timestamp_local` para recuperar o mês.\n",
+        "\n",
+        "Utilize a variável `order_total`para computar as estatísticas básicas para cada mês.\n",
+        "\n",
+        "É obrigatório o uso do `groupby`."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 331
+        },
+        "id": "cKzqyVor1Cjn",
+        "outputId": "84ab7cdc-ea83-4d6c-902e-434122e36b6c"
+      },
+      "outputs": [
+        {
+          "name": "stderr",
+          "output_type": "stream",
+          "text": [
+            "/usr/local/lib/python3.7/dist-packages/pandas/core/arrays/datetimes.py:1092: UserWarning: Converting to PeriodArray/Index representation will drop timezone information.\n",
+            "  UserWarning,\n"
+          ]
+        },
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>min_order_total</th>\n",
+              "      <th>mean_order_total</th>\n",
+              "      <th>max_order_total</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>meses</th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>2019-06</th>\n",
+              "      <td>13.05</td>\n",
+              "      <td>55.43</td>\n",
+              "      <td>609.10</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2019-07</th>\n",
+              "      <td>13.50</td>\n",
+              "      <td>54.82</td>\n",
+              "      <td>603.60</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2019-08</th>\n",
+              "      <td>13.00</td>\n",
+              "      <td>55.77</td>\n",
+              "      <td>1058.00</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2019-09</th>\n",
+              "      <td>16.50</td>\n",
+              "      <td>55.62</td>\n",
+              "      <td>759.50</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2019-10</th>\n",
+              "      <td>15.00</td>\n",
+              "      <td>55.43</td>\n",
+              "      <td>807.30</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2019-11</th>\n",
+              "      <td>13.79</td>\n",
+              "      <td>56.10</td>\n",
+              "      <td>667.70</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2019-12</th>\n",
+              "      <td>14.00</td>\n",
+              "      <td>57.76</td>\n",
+              "      <td>1641.00</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "         min_order_total  mean_order_total  max_order_total\n",
+              "meses                                                      \n",
+              "2019-06            13.05             55.43           609.10\n",
+              "2019-07            13.50             54.82           603.60\n",
+              "2019-08            13.00             55.77          1058.00\n",
+              "2019-09            16.50             55.62           759.50\n",
+              "2019-10            15.00             55.43           807.30\n",
+              "2019-11            13.79             56.10           667.70\n",
+              "2019-12            14.00             57.76          1641.00"
+            ]
+          },
+          "execution_count": 254,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "(\n",
+        "    df_orders\n",
+        "    .assign(meses = df_orders.order_timestamp_local.dt.to_period('M'))\n",
+        "    .groupby('meses')\n",
+        "    .agg(\n",
+        "        min_order_total = ('order_total', 'min'),\n",
+        "        mean_order_total = ('order_total', 'mean'),\n",
+        "        max_order_total = ('order_total', 'max')\n",
+        "    )\n",
+        ")"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "AV8trDKP1Cjq"
+      },
+      "source": [
+        "### Sessões das visitas realizadas - `sessions_visits`\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "hpMYQbif1Cjq"
+      },
+      "outputs": [],
+      "source": [
+        "df_session_visits = pd.read_csv(f'{pasta_raiz}/df_sessions_visits.csv', sep=',')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 267
+        },
+        "id": "-wonTie-1Cjs",
+        "outputId": "35c8bb84-b406-4796-ea23-f466c6fa2eac"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>session_id</th>\n",
+              "      <th>dau</th>\n",
+              "      <th>platform</th>\n",
+              "      <th>user_identifier</th>\n",
+              "      <th>user_account_uuid</th>\n",
+              "      <th>session_started_at_amsp</th>\n",
+              "      <th>session_ended_at_amsp</th>\n",
+              "      <th>session_started_at_utc0</th>\n",
+              "      <th>session_ended_at_utc0</th>\n",
+              "      <th>session_duration_seconds</th>\n",
+              "      <th>device_model</th>\n",
+              "      <th>device_manufacturer</th>\n",
+              "      <th>sum_event_open</th>\n",
+              "      <th>sum_view_restaurant_screen</th>\n",
+              "      <th>sum_view_dish_screen</th>\n",
+              "      <th>sum_click_add_item</th>\n",
+              "      <th>sum_view_checkout</th>\n",
+              "      <th>sum_callback_purchase</th>\n",
+              "      <th>order_session_quantity</th>\n",
+              "      <th>first_order_origin_feature</th>\n",
+              "      <th>media_network</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>41162808-5335-4e4f-aa52-45754ec1d558</td>\n",
+              "      <td>2019-11-04_661ead80-50a2-48b4-ae78-f872e2f08c11</td>\n",
+              "      <td>IOS</td>\n",
+              "      <td>ffa840ebe8b397e995245525ec98f0b31a882c4d3e47dc...</td>\n",
+              "      <td>ca438b60-3d04-44c0-9883-c4f01fc512ad</td>\n",
+              "      <td>2019-11-04T09:14:47.566Z</td>\n",
+              "      <td>2019-11-04T09:15:50.323Z</td>\n",
+              "      <td>2019-11-04T11:14:47.566Z</td>\n",
+              "      <td>2019-11-04T11:15:50.323Z</td>\n",
+              "      <td>63.00</td>\n",
+              "      <td>iPhone9,3</td>\n",
+              "      <td>Apple</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>nan</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Loop</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>52f0a543-fcc7-4ff0-bed1-41bec8a51374</td>\n",
+              "      <td>2019-12-07_17ae6c54-37e1-42e3-b82b-e562aaeb7730</td>\n",
+              "      <td>IOS</td>\n",
+              "      <td>a59ea42fbbaf0fa9a48b65f45842d9d061d23775ad2af6...</td>\n",
+              "      <td>414f1e51-e872-42ca-ad5e-c30b085bd5e4</td>\n",
+              "      <td>2019-12-07T13:28:37.764Z</td>\n",
+              "      <td>2019-12-07T15:04:00.819Z</td>\n",
+              "      <td>2019-12-07T15:28:37.764Z</td>\n",
+              "      <td>2019-12-07T17:04:00.819Z</td>\n",
+              "      <td>5723.00</td>\n",
+              "      <td>iPhone9,3</td>\n",
+              "      <td>Apple</td>\n",
+              "      <td>17.00</td>\n",
+              "      <td>12.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Last Restaurants</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                             session_id  ... media_network\n",
+              "0  41162808-5335-4e4f-aa52-45754ec1d558  ...           NaN\n",
+              "1  52f0a543-fcc7-4ff0-bed1-41bec8a51374  ...           NaN\n",
+              "\n",
+              "[2 rows x 21 columns]"
+            ]
+          },
+          "execution_count": 256,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "df_session_visits.head(2)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "zYVEDXJz1Cjt"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(3 pontos)</span> `Q12` Realize o passo a passo abaixo:**\n",
+        "\n",
+        "* Faça concatenação das variáveis `user_identifier` e `session_id`, nesta ordem, para criar um novo identidicador único, chamado `unique_id`\n",
+        "\n",
+        "* Insira a coluna `unique_id` na posição 0 do DataFrame `df_session_visits`. Utilize uma variável auxiliar para facilitar.\n",
+        "\n",
+        "* Crie uma nova coluna com a diferença entre as variáveis `session_started_at_utc0` e `session_ended_at_utc0`. O nome da coluna deve ser `tempo_sessao`.\n",
+        "\n",
+        "* Crie uma função que irá receber dois parâmetros, uma DataFrame e outra a quantidade de usuário mais ativos dentro da plataforma.\n",
+        "\n",
+        "O objetivo dessa função é verificar os n usuários que ficaram mais tempo dentro da plataforma. NÃO precisa fazer a agregação, considere cada linha um usuário único.\n",
+        "\n",
+        "**O retorno dessa função deve ser um DataFrame que irá conter todas as colunas filtradas para os n usuários mais ativos, incluindo as duas novas colunas criadas anteriormente (`unique_id` e `tempo_sessao`)**\n",
+        "\n",
+        "Teste a função com os seguintes comandos:\n",
+        "\n",
+        "    recuperar_n_mais_usuarios_ativos(df_session=df_session_visits, n_mais_usuarios=0)\n",
+        "    recuperar_n_mais_usuarios_ativos(df_session=df_session_visits, n_mais_usuarios=10)\n",
+        "\n",
+        "**Lembre-se de tratar possíveis erros**\n",
+        "\n",
+        "* Por fim, copie e cole o seguinte comando na última célula do exercício.\n",
+        "\n",
+        "        df_final = recuperar_n_mais_usuarios_ativos(df_session=df_session_visits, n_mais_usuarios=1000)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 564
+        },
+        "id": "K-w8bpJK21xP",
+        "outputId": "cd061ab1-f880-4b55-eb21-9023cdd7fde5"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>unique_id</th>\n",
+              "      <th>session_id</th>\n",
+              "      <th>dau</th>\n",
+              "      <th>platform</th>\n",
+              "      <th>user_identifier</th>\n",
+              "      <th>user_account_uuid</th>\n",
+              "      <th>session_started_at_amsp</th>\n",
+              "      <th>session_ended_at_amsp</th>\n",
+              "      <th>session_started_at_utc0</th>\n",
+              "      <th>session_ended_at_utc0</th>\n",
+              "      <th>session_duration_seconds</th>\n",
+              "      <th>device_model</th>\n",
+              "      <th>device_manufacturer</th>\n",
+              "      <th>sum_event_open</th>\n",
+              "      <th>sum_view_restaurant_screen</th>\n",
+              "      <th>sum_view_dish_screen</th>\n",
+              "      <th>sum_click_add_item</th>\n",
+              "      <th>sum_view_checkout</th>\n",
+              "      <th>sum_callback_purchase</th>\n",
+              "      <th>order_session_quantity</th>\n",
+              "      <th>first_order_origin_feature</th>\n",
+              "      <th>media_network</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>ffa840ebe8b397e995245525ec98f0b31a882c4d3e47dc...</td>\n",
+              "      <td>41162808-5335-4e4f-aa52-45754ec1d558</td>\n",
+              "      <td>2019-11-04_661ead80-50a2-48b4-ae78-f872e2f08c11</td>\n",
+              "      <td>IOS</td>\n",
+              "      <td>ffa840ebe8b397e995245525ec98f0b31a882c4d3e47dc...</td>\n",
+              "      <td>ca438b60-3d04-44c0-9883-c4f01fc512ad</td>\n",
+              "      <td>2019-11-04T09:14:47.566Z</td>\n",
+              "      <td>2019-11-04T09:15:50.323Z</td>\n",
+              "      <td>2019-11-04T11:14:47.566Z</td>\n",
+              "      <td>2019-11-04T11:15:50.323Z</td>\n",
+              "      <td>63.00</td>\n",
+              "      <td>iPhone9,3</td>\n",
+              "      <td>Apple</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>nan</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Loop</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>a59ea42fbbaf0fa9a48b65f45842d9d061d23775ad2af6...</td>\n",
+              "      <td>52f0a543-fcc7-4ff0-bed1-41bec8a51374</td>\n",
+              "      <td>2019-12-07_17ae6c54-37e1-42e3-b82b-e562aaeb7730</td>\n",
+              "      <td>IOS</td>\n",
+              "      <td>a59ea42fbbaf0fa9a48b65f45842d9d061d23775ad2af6...</td>\n",
+              "      <td>414f1e51-e872-42ca-ad5e-c30b085bd5e4</td>\n",
+              "      <td>2019-12-07T13:28:37.764Z</td>\n",
+              "      <td>2019-12-07T15:04:00.819Z</td>\n",
+              "      <td>2019-12-07T15:28:37.764Z</td>\n",
+              "      <td>2019-12-07T17:04:00.819Z</td>\n",
+              "      <td>5723.00</td>\n",
+              "      <td>iPhone9,3</td>\n",
+              "      <td>Apple</td>\n",
+              "      <td>17.00</td>\n",
+              "      <td>12.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Last Restaurants</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>e7dcbc11f83b22ea57ec8b385b9fa38d48532b180e3d19...</td>\n",
+              "      <td>f06f2a6d-14cc-44e3-8ec6-66191659430b</td>\n",
+              "      <td>2019-12-29_d8a7f51d-4394-3c9a-ae62-8522f5885d3f</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>e7dcbc11f83b22ea57ec8b385b9fa38d48532b180e3d19...</td>\n",
+              "      <td>5c697207-d8a4-460e-b171-3e94e42be5ab</td>\n",
+              "      <td>2019-12-29T19:58:38.297Z</td>\n",
+              "      <td>2019-12-29T20:17:45.199Z</td>\n",
+              "      <td>2019-12-29T22:58:38.297Z</td>\n",
+              "      <td>2019-12-29T23:17:45.199Z</td>\n",
+              "      <td>1147.00</td>\n",
+              "      <td>Redmi Note 8</td>\n",
+              "      <td>Xiaomi</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>7.00</td>\n",
+              "      <td>7.00</td>\n",
+              "      <td>5.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Ranking</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>2959b13e1caef84fa6cde74693ba2476f17eaa72b66dad...</td>\n",
+              "      <td>716d0044-0d76-4199-86ca-62930a751d59</td>\n",
+              "      <td>2019-12-03_9675dcd9-9dd5-3ec3-809e-9006b4fac160</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>2959b13e1caef84fa6cde74693ba2476f17eaa72b66dad...</td>\n",
+              "      <td>615b2fb5-e76d-4fa7-b982-9564650c76c5</td>\n",
+              "      <td>2019-12-03T14:54:14.621Z</td>\n",
+              "      <td>2019-12-03T16:31:47.527Z</td>\n",
+              "      <td>2019-12-03T16:54:14.621Z</td>\n",
+              "      <td>2019-12-03T18:31:47.527Z</td>\n",
+              "      <td>5853.00</td>\n",
+              "      <td>SM-A520F</td>\n",
+              "      <td>samsung</td>\n",
+              "      <td>11.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Taxa na faixa</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>9c944018e8b8cd2ac2fec6edf1f46c3c452c4e70c46e39...</td>\n",
+              "      <td>96081494-8554-4c3f-92b6-94e2070d1660</td>\n",
+              "      <td>2019-12-20_e953c804-ecd2-3f00-8465-0ba2d8ce5aa1</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>9c944018e8b8cd2ac2fec6edf1f46c3c452c4e70c46e39...</td>\n",
+              "      <td>ba8596c4-9fbf-4f67-9e2a-dbb65f4b7c40</td>\n",
+              "      <td>2019-12-20T20:28:22.584Z</td>\n",
+              "      <td>2019-12-20T20:54:25.376Z</td>\n",
+              "      <td>2019-12-20T23:28:22.584Z</td>\n",
+              "      <td>2019-12-20T23:54:25.376Z</td>\n",
+              "      <td>1563.00</td>\n",
+              "      <td>SM-J710MN</td>\n",
+              "      <td>samsung</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>9.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>CRM Restaurant</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                                           unique_id  ... media_network\n",
+              "0  ffa840ebe8b397e995245525ec98f0b31a882c4d3e47dc...  ...           NaN\n",
+              "1  a59ea42fbbaf0fa9a48b65f45842d9d061d23775ad2af6...  ...           NaN\n",
+              "2  e7dcbc11f83b22ea57ec8b385b9fa38d48532b180e3d19...  ...           NaN\n",
+              "3  2959b13e1caef84fa6cde74693ba2476f17eaa72b66dad...  ...           NaN\n",
+              "4  9c944018e8b8cd2ac2fec6edf1f46c3c452c4e70c46e39...  ...           NaN\n",
+              "\n",
+              "[5 rows x 22 columns]"
+            ]
+          },
+          "execution_count": 257,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "df_session_visits['user_identifier'].fillna('', inplace=True)\n",
+        "df_aux = df_session_visits['user_identifier'] + df_session_visits['session_id']\n",
+        "df_session_visits.insert(0, 'unique_id', df_aux)\n",
+        "df_session_visits.head(5)\n",
+        "#Concatenacao das variaveis\n",
+        "#Coluna criada na posição 0."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 1000
+        },
+        "id": "eo4JHBc-BKeA",
+        "outputId": "d6ff3c5c-5479-458e-b7f4-49bc3a3ebf00"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>unique_id</th>\n",
+              "      <th>session_id</th>\n",
+              "      <th>dau</th>\n",
+              "      <th>platform</th>\n",
+              "      <th>user_identifier</th>\n",
+              "      <th>user_account_uuid</th>\n",
+              "      <th>session_started_at_amsp</th>\n",
+              "      <th>session_ended_at_amsp</th>\n",
+              "      <th>session_started_at_utc0</th>\n",
+              "      <th>session_ended_at_utc0</th>\n",
+              "      <th>session_duration_seconds</th>\n",
+              "      <th>device_model</th>\n",
+              "      <th>device_manufacturer</th>\n",
+              "      <th>sum_event_open</th>\n",
+              "      <th>sum_view_restaurant_screen</th>\n",
+              "      <th>sum_view_dish_screen</th>\n",
+              "      <th>sum_click_add_item</th>\n",
+              "      <th>sum_view_checkout</th>\n",
+              "      <th>sum_callback_purchase</th>\n",
+              "      <th>order_session_quantity</th>\n",
+              "      <th>first_order_origin_feature</th>\n",
+              "      <th>media_network</th>\n",
+              "      <th>tempo_sessao</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>ffa840ebe8b397e995245525ec98f0b31a882c4d3e47dc...</td>\n",
+              "      <td>41162808-5335-4e4f-aa52-45754ec1d558</td>\n",
+              "      <td>2019-11-04_661ead80-50a2-48b4-ae78-f872e2f08c11</td>\n",
+              "      <td>IOS</td>\n",
+              "      <td>ffa840ebe8b397e995245525ec98f0b31a882c4d3e47dc...</td>\n",
+              "      <td>ca438b60-3d04-44c0-9883-c4f01fc512ad</td>\n",
+              "      <td>2019-11-04T09:14:47.566Z</td>\n",
+              "      <td>2019-11-04T09:15:50.323Z</td>\n",
+              "      <td>2019-11-04 11:14:47.566000+00:00</td>\n",
+              "      <td>2019-11-04 11:15:50.323000+00:00</td>\n",
+              "      <td>63.00</td>\n",
+              "      <td>iPhone9,3</td>\n",
+              "      <td>Apple</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>nan</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Loop</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>0 days 00:01:02.757000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>a59ea42fbbaf0fa9a48b65f45842d9d061d23775ad2af6...</td>\n",
+              "      <td>52f0a543-fcc7-4ff0-bed1-41bec8a51374</td>\n",
+              "      <td>2019-12-07_17ae6c54-37e1-42e3-b82b-e562aaeb7730</td>\n",
+              "      <td>IOS</td>\n",
+              "      <td>a59ea42fbbaf0fa9a48b65f45842d9d061d23775ad2af6...</td>\n",
+              "      <td>414f1e51-e872-42ca-ad5e-c30b085bd5e4</td>\n",
+              "      <td>2019-12-07T13:28:37.764Z</td>\n",
+              "      <td>2019-12-07T15:04:00.819Z</td>\n",
+              "      <td>2019-12-07 15:28:37.764000+00:00</td>\n",
+              "      <td>2019-12-07 17:04:00.819000+00:00</td>\n",
+              "      <td>5723.00</td>\n",
+              "      <td>iPhone9,3</td>\n",
+              "      <td>Apple</td>\n",
+              "      <td>17.00</td>\n",
+              "      <td>12.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Last Restaurants</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>0 days 01:35:23.055000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>e7dcbc11f83b22ea57ec8b385b9fa38d48532b180e3d19...</td>\n",
+              "      <td>f06f2a6d-14cc-44e3-8ec6-66191659430b</td>\n",
+              "      <td>2019-12-29_d8a7f51d-4394-3c9a-ae62-8522f5885d3f</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>e7dcbc11f83b22ea57ec8b385b9fa38d48532b180e3d19...</td>\n",
+              "      <td>5c697207-d8a4-460e-b171-3e94e42be5ab</td>\n",
+              "      <td>2019-12-29T19:58:38.297Z</td>\n",
+              "      <td>2019-12-29T20:17:45.199Z</td>\n",
+              "      <td>2019-12-29 22:58:38.297000+00:00</td>\n",
+              "      <td>2019-12-29 23:17:45.199000+00:00</td>\n",
+              "      <td>1147.00</td>\n",
+              "      <td>Redmi Note 8</td>\n",
+              "      <td>Xiaomi</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>7.00</td>\n",
+              "      <td>7.00</td>\n",
+              "      <td>5.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Ranking</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>0 days 00:19:06.902000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>2959b13e1caef84fa6cde74693ba2476f17eaa72b66dad...</td>\n",
+              "      <td>716d0044-0d76-4199-86ca-62930a751d59</td>\n",
+              "      <td>2019-12-03_9675dcd9-9dd5-3ec3-809e-9006b4fac160</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>2959b13e1caef84fa6cde74693ba2476f17eaa72b66dad...</td>\n",
+              "      <td>615b2fb5-e76d-4fa7-b982-9564650c76c5</td>\n",
+              "      <td>2019-12-03T14:54:14.621Z</td>\n",
+              "      <td>2019-12-03T16:31:47.527Z</td>\n",
+              "      <td>2019-12-03 16:54:14.621000+00:00</td>\n",
+              "      <td>2019-12-03 18:31:47.527000+00:00</td>\n",
+              "      <td>5853.00</td>\n",
+              "      <td>SM-A520F</td>\n",
+              "      <td>samsung</td>\n",
+              "      <td>11.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Taxa na faixa</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>0 days 01:37:32.906000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>9c944018e8b8cd2ac2fec6edf1f46c3c452c4e70c46e39...</td>\n",
+              "      <td>96081494-8554-4c3f-92b6-94e2070d1660</td>\n",
+              "      <td>2019-12-20_e953c804-ecd2-3f00-8465-0ba2d8ce5aa1</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>9c944018e8b8cd2ac2fec6edf1f46c3c452c4e70c46e39...</td>\n",
+              "      <td>ba8596c4-9fbf-4f67-9e2a-dbb65f4b7c40</td>\n",
+              "      <td>2019-12-20T20:28:22.584Z</td>\n",
+              "      <td>2019-12-20T20:54:25.376Z</td>\n",
+              "      <td>2019-12-20 23:28:22.584000+00:00</td>\n",
+              "      <td>2019-12-20 23:54:25.376000+00:00</td>\n",
+              "      <td>1563.00</td>\n",
+              "      <td>SM-J710MN</td>\n",
+              "      <td>samsung</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>9.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>CRM Restaurant</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>0 days 00:26:02.792000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>463615</th>\n",
+              "      <td>0c3195c85a1ece02cc06ef30d09beb2a69109a39457f16...</td>\n",
+              "      <td>5099516b-0b36-499d-83ff-3cd5ada72001</td>\n",
+              "      <td>2019-12-13_85f8a4fc-8078-4b7b-93b7-232bbfb3e98e</td>\n",
+              "      <td>IOS</td>\n",
+              "      <td>0c3195c85a1ece02cc06ef30d09beb2a69109a39457f16...</td>\n",
+              "      <td>d1848636-2218-4c00-8f41-30e413192fa8</td>\n",
+              "      <td>2019-12-13T21:58:41.913Z</td>\n",
+              "      <td>2019-12-13T22:19:24.419Z</td>\n",
+              "      <td>2019-12-14 00:58:41.913000+00:00</td>\n",
+              "      <td>2019-12-14 01:19:24.419000+00:00</td>\n",
+              "      <td>1243.00</td>\n",
+              "      <td>iPhone10,4</td>\n",
+              "      <td>Apple</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>7.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Ranking</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>0 days 00:20:42.506000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>463616</th>\n",
+              "      <td>895a07fa1934c03bef7bc4238109bf484f615838b7b336...</td>\n",
+              "      <td>66f47559-3b0c-4cf0-88bc-0a296ca4443c</td>\n",
+              "      <td>2019-09-01_c233d0de-4ed6-4aba-86fd-3bcd0bb98c19</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>895a07fa1934c03bef7bc4238109bf484f615838b7b336...</td>\n",
+              "      <td>2142539e-34f6-4e1a-b14b-40f8cd6e656e</td>\n",
+              "      <td>2019-09-01T13:33:10.010Z</td>\n",
+              "      <td>2019-09-01T13:33:50.050Z</td>\n",
+              "      <td>2019-09-01 16:33:10.010000+00:00</td>\n",
+              "      <td>2019-09-01 16:33:50.050000+00:00</td>\n",
+              "      <td>40.00</td>\n",
+              "      <td>moto g(7) play</td>\n",
+              "      <td>motorola</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Featured Restaurant</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>0 days 00:00:40.040000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>463617</th>\n",
+              "      <td>acfd0466-3dc3-48e3-8b8a-b272e23d9151</td>\n",
+              "      <td>acfd0466-3dc3-48e3-8b8a-b272e23d9151</td>\n",
+              "      <td>2019-07-11_7056333d-fd05-4e03-8cdd-ac235e2f6917</td>\n",
+              "      <td>IOS</td>\n",
+              "      <td></td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>2019-07-11T18:53:45.979Z</td>\n",
+              "      <td>2019-07-11T19:05:36.515Z</td>\n",
+              "      <td>2019-07-11 21:53:45.979000+00:00</td>\n",
+              "      <td>2019-07-11 22:05:36.515000+00:00</td>\n",
+              "      <td>711.00</td>\n",
+              "      <td>iPhone9,4</td>\n",
+              "      <td>Apple</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>13.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Taxa Na Faixa</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>0 days 00:11:50.536000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>463618</th>\n",
+              "      <td>0aba2c10-4c64-4a10-b418-84ea60c8b51ad2b665b3-1...</td>\n",
+              "      <td>d2b665b3-1533-406c-89ef-d509c6dc413c</td>\n",
+              "      <td>2019-06-08_2191addb-5405-4f1f-8f5b-46ff4286acb1</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>0aba2c10-4c64-4a10-b418-84ea60c8b51a</td>\n",
+              "      <td>0aba2c10-4c64-4a10-b418-84ea60c8b51a</td>\n",
+              "      <td>2019-06-08T18:03:07.007Z</td>\n",
+              "      <td>2019-06-08T18:57:16.016Z</td>\n",
+              "      <td>2019-06-08 21:03:07.007000+00:00</td>\n",
+              "      <td>2019-06-08 21:57:16.016000+00:00</td>\n",
+              "      <td>3249.00</td>\n",
+              "      <td>XT1635-02</td>\n",
+              "      <td>motorola</td>\n",
+              "      <td>16.00</td>\n",
+              "      <td>14.00</td>\n",
+              "      <td>6.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Brasileira</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>0 days 00:54:09.009000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>463619</th>\n",
+              "      <td>47c05ebd-4e66-4a96-93eb-de51216f4e024e50876d-b...</td>\n",
+              "      <td>4e50876d-b1fa-41db-b054-95035614afd3</td>\n",
+              "      <td>2019-07-24_38a7c2a4-491c-40c9-8da4-0e85a034cca9</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>47c05ebd-4e66-4a96-93eb-de51216f4e02</td>\n",
+              "      <td>47c05ebd-4e66-4a96-93eb-de51216f4e02</td>\n",
+              "      <td>2019-07-24T20:12:41.041Z</td>\n",
+              "      <td>2019-07-24T21:27:27.027Z</td>\n",
+              "      <td>2019-07-24 23:12:41.041000+00:00</td>\n",
+              "      <td>2019-07-25 00:27:27.027000+00:00</td>\n",
+              "      <td>4486.00</td>\n",
+              "      <td>XT1069</td>\n",
+              "      <td>motorola</td>\n",
+              "      <td>10.00</td>\n",
+              "      <td>7.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Ranking</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>0 days 01:14:45.986000</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>463620 rows × 23 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                                                unique_id  ...           tempo_sessao\n",
+              "0       ffa840ebe8b397e995245525ec98f0b31a882c4d3e47dc...  ... 0 days 00:01:02.757000\n",
+              "1       a59ea42fbbaf0fa9a48b65f45842d9d061d23775ad2af6...  ... 0 days 01:35:23.055000\n",
+              "2       e7dcbc11f83b22ea57ec8b385b9fa38d48532b180e3d19...  ... 0 days 00:19:06.902000\n",
+              "3       2959b13e1caef84fa6cde74693ba2476f17eaa72b66dad...  ... 0 days 01:37:32.906000\n",
+              "4       9c944018e8b8cd2ac2fec6edf1f46c3c452c4e70c46e39...  ... 0 days 00:26:02.792000\n",
+              "...                                                   ...  ...                    ...\n",
+              "463615  0c3195c85a1ece02cc06ef30d09beb2a69109a39457f16...  ... 0 days 00:20:42.506000\n",
+              "463616  895a07fa1934c03bef7bc4238109bf484f615838b7b336...  ... 0 days 00:00:40.040000\n",
+              "463617               acfd0466-3dc3-48e3-8b8a-b272e23d9151  ... 0 days 00:11:50.536000\n",
+              "463618  0aba2c10-4c64-4a10-b418-84ea60c8b51ad2b665b3-1...  ... 0 days 00:54:09.009000\n",
+              "463619  47c05ebd-4e66-4a96-93eb-de51216f4e024e50876d-b...  ... 0 days 01:14:45.986000\n",
+              "\n",
+              "[463620 rows x 23 columns]"
+            ]
+          },
+          "execution_count": 258,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "df_session_visits.session_started_at_utc0 = pd.to_datetime(df_session_visits.session_started_at_utc0)\n",
+        "df_session_visits.session_ended_at_utc0 = pd.to_datetime(df_session_visits.session_ended_at_utc0)\n",
+        "df_session_visits['tempo_sessao'] = df_session_visits.session_ended_at_utc0 - df_session_visits.session_started_at_utc0\n",
+        "df_session_visits\n",
+        "#Criando varial tempo_sessao"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "3vc5sDwA3Zud"
+      },
+      "source": [
+        ""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "83H3Dq2R1Cj1"
+      },
+      "outputs": [],
+      "source": [
+        "def recuperar_n_mais_usuarios_ativos(df_session, n_mais_usuarios=10):\n",
+        "    return(df_session.sort_values('tempo_sessao', ascending=False).head(n_mais_usuarios))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 69
+        },
+        "id": "vUmsgZhx1Cj2",
+        "outputId": "1a6426cb-59c9-4a43-8145-18704148bfdc"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>unique_id</th>\n",
+              "      <th>session_id</th>\n",
+              "      <th>dau</th>\n",
+              "      <th>platform</th>\n",
+              "      <th>user_identifier</th>\n",
+              "      <th>user_account_uuid</th>\n",
+              "      <th>session_started_at_amsp</th>\n",
+              "      <th>session_ended_at_amsp</th>\n",
+              "      <th>session_started_at_utc0</th>\n",
+              "      <th>session_ended_at_utc0</th>\n",
+              "      <th>session_duration_seconds</th>\n",
+              "      <th>device_model</th>\n",
+              "      <th>device_manufacturer</th>\n",
+              "      <th>sum_event_open</th>\n",
+              "      <th>sum_view_restaurant_screen</th>\n",
+              "      <th>sum_view_dish_screen</th>\n",
+              "      <th>sum_click_add_item</th>\n",
+              "      <th>sum_view_checkout</th>\n",
+              "      <th>sum_callback_purchase</th>\n",
+              "      <th>order_session_quantity</th>\n",
+              "      <th>first_order_origin_feature</th>\n",
+              "      <th>media_network</th>\n",
+              "      <th>tempo_sessao</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "Empty DataFrame\n",
+              "Columns: [unique_id, session_id, dau, platform, user_identifier, user_account_uuid, session_started_at_amsp, session_ended_at_amsp, session_started_at_utc0, session_ended_at_utc0, session_duration_seconds, device_model, device_manufacturer, sum_event_open, sum_view_restaurant_screen, sum_view_dish_screen, sum_click_add_item, sum_view_checkout, sum_callback_purchase, order_session_quantity, first_order_origin_feature, media_network, tempo_sessao]\n",
+              "Index: []"
+            ]
+          },
+          "execution_count": 260,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "# Teste com o seguinte comando:\n",
+        "recuperar_n_mais_usuarios_ativos(df_session=df_session_visits, n_mais_usuarios=0)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 366
+        },
+        "id": "M1hm5FzD1Cj5",
+        "outputId": "488b9093-9b54-4017-c98f-4aaefde4e4ff"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>unique_id</th>\n",
+              "      <th>session_id</th>\n",
+              "      <th>dau</th>\n",
+              "      <th>platform</th>\n",
+              "      <th>user_identifier</th>\n",
+              "      <th>user_account_uuid</th>\n",
+              "      <th>session_started_at_amsp</th>\n",
+              "      <th>session_ended_at_amsp</th>\n",
+              "      <th>session_started_at_utc0</th>\n",
+              "      <th>session_ended_at_utc0</th>\n",
+              "      <th>session_duration_seconds</th>\n",
+              "      <th>device_model</th>\n",
+              "      <th>device_manufacturer</th>\n",
+              "      <th>sum_event_open</th>\n",
+              "      <th>sum_view_restaurant_screen</th>\n",
+              "      <th>sum_view_dish_screen</th>\n",
+              "      <th>sum_click_add_item</th>\n",
+              "      <th>sum_view_checkout</th>\n",
+              "      <th>sum_callback_purchase</th>\n",
+              "      <th>order_session_quantity</th>\n",
+              "      <th>first_order_origin_feature</th>\n",
+              "      <th>media_network</th>\n",
+              "      <th>tempo_sessao</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>351470</th>\n",
+              "      <td>503d295dbeef80d0169bc59bd4ea87f9f9a7689b9cb4b3...</td>\n",
+              "      <td>3b42a14d-b19b-40fe-9b0b-e0dbc4689197</td>\n",
+              "      <td>2019-10-17_9f643ee2-35b0-3d16-a71c-c403417f77b2</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>503d295dbeef80d0169bc59bd4ea87f9f9a7689b9cb4b3...</td>\n",
+              "      <td>f9bc0483-155a-4ebf-83f1-fe6271e80517</td>\n",
+              "      <td>2019-10-17T15:09:21.865Z</td>\n",
+              "      <td>2019-11-16T11:38:32.402Z</td>\n",
+              "      <td>2019-10-17 18:09:21.865000+00:00</td>\n",
+              "      <td>2019-11-16 13:38:32.402000+00:00</td>\n",
+              "      <td>2575751.00</td>\n",
+              "      <td>Moto G (5S) Plus</td>\n",
+              "      <td>motorola</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Ranking</td>\n",
+              "      <td>googleadwords_int</td>\n",
+              "      <td>29 days 19:29:10.537000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>350512</th>\n",
+              "      <td>de14cef1f693ed124d1ac58b38a88ebe835b7dd1752cf2...</td>\n",
+              "      <td>2d10f2ac-7883-42aa-8d30-d9c4c548cdca</td>\n",
+              "      <td>2019-09-01_2305c8c3-3784-386f-8960-6a129ca1716d</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>de14cef1f693ed124d1ac58b38a88ebe835b7dd1752cf2...</td>\n",
+              "      <td>2018114a-d02d-48ca-97b4-5a2ab286f9dd</td>\n",
+              "      <td>2019-09-01T00:17:12.012Z</td>\n",
+              "      <td>2019-09-28T23:44:19.234Z</td>\n",
+              "      <td>2019-09-01 03:17:12.012000+00:00</td>\n",
+              "      <td>2019-09-29 02:44:19.234000+00:00</td>\n",
+              "      <td>2417227.00</td>\n",
+              "      <td>Redmi 7</td>\n",
+              "      <td>Xiaomi</td>\n",
+              "      <td>13.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>10.00</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>super categories bebidas</td>\n",
+              "      <td>Facebook Ads</td>\n",
+              "      <td>27 days 23:27:07.222000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>137922</th>\n",
+              "      <td>741e8ab0-47ab-49e0-b00a-135d80d6614f176e1dd5-d...</td>\n",
+              "      <td>176e1dd5-d9a1-4508-a7a3-b95cbaa6eeeb</td>\n",
+              "      <td>2019-06-01_f395407f-0eda-4fa6-b8bc-b5510dab53d3</td>\n",
+              "      <td>IOS</td>\n",
+              "      <td>741e8ab0-47ab-49e0-b00a-135d80d6614f</td>\n",
+              "      <td>741e8ab0-47ab-49e0-b00a-135d80d6614f</td>\n",
+              "      <td>2019-06-01T18:41:12.152Z</td>\n",
+              "      <td>2019-06-29T17:33:05.611Z</td>\n",
+              "      <td>2019-06-01 21:41:12.152000+00:00</td>\n",
+              "      <td>2019-06-29 20:33:05.611000+00:00</td>\n",
+              "      <td>2415113.00</td>\n",
+              "      <td>iPhone9,4</td>\n",
+              "      <td>Apple</td>\n",
+              "      <td>6.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Featured Restaurant</td>\n",
+              "      <td>googleadwords_int</td>\n",
+              "      <td>27 days 22:51:53.459000</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                                                unique_id  ...            tempo_sessao\n",
+              "351470  503d295dbeef80d0169bc59bd4ea87f9f9a7689b9cb4b3...  ... 29 days 19:29:10.537000\n",
+              "350512  de14cef1f693ed124d1ac58b38a88ebe835b7dd1752cf2...  ... 27 days 23:27:07.222000\n",
+              "137922  741e8ab0-47ab-49e0-b00a-135d80d6614f176e1dd5-d...  ... 27 days 22:51:53.459000\n",
+              "\n",
+              "[3 rows x 23 columns]"
+            ]
+          },
+          "execution_count": 261,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "# Teste com o seguinte comando:\n",
+        "recuperar_n_mais_usuarios_ativos(df_session=df_session_visits, n_mais_usuarios=3)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 267
+        },
+        "id": "DFdLHKuy1Cj6",
+        "outputId": "3cba0a49-116e-4e58-f06f-aea2e3dff63e"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>unique_id</th>\n",
+              "      <th>session_id</th>\n",
+              "      <th>dau</th>\n",
+              "      <th>platform</th>\n",
+              "      <th>user_identifier</th>\n",
+              "      <th>user_account_uuid</th>\n",
+              "      <th>session_started_at_amsp</th>\n",
+              "      <th>session_ended_at_amsp</th>\n",
+              "      <th>session_started_at_utc0</th>\n",
+              "      <th>session_ended_at_utc0</th>\n",
+              "      <th>session_duration_seconds</th>\n",
+              "      <th>device_model</th>\n",
+              "      <th>device_manufacturer</th>\n",
+              "      <th>sum_event_open</th>\n",
+              "      <th>sum_view_restaurant_screen</th>\n",
+              "      <th>sum_view_dish_screen</th>\n",
+              "      <th>sum_click_add_item</th>\n",
+              "      <th>sum_view_checkout</th>\n",
+              "      <th>sum_callback_purchase</th>\n",
+              "      <th>order_session_quantity</th>\n",
+              "      <th>first_order_origin_feature</th>\n",
+              "      <th>media_network</th>\n",
+              "      <th>tempo_sessao</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>351470</th>\n",
+              "      <td>503d295dbeef80d0169bc59bd4ea87f9f9a7689b9cb4b3...</td>\n",
+              "      <td>3b42a14d-b19b-40fe-9b0b-e0dbc4689197</td>\n",
+              "      <td>2019-10-17_9f643ee2-35b0-3d16-a71c-c403417f77b2</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>503d295dbeef80d0169bc59bd4ea87f9f9a7689b9cb4b3...</td>\n",
+              "      <td>f9bc0483-155a-4ebf-83f1-fe6271e80517</td>\n",
+              "      <td>2019-10-17T15:09:21.865Z</td>\n",
+              "      <td>2019-11-16T11:38:32.402Z</td>\n",
+              "      <td>2019-10-17 18:09:21.865000+00:00</td>\n",
+              "      <td>2019-11-16 13:38:32.402000+00:00</td>\n",
+              "      <td>2575751.00</td>\n",
+              "      <td>Moto G (5S) Plus</td>\n",
+              "      <td>motorola</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>3.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>Ranking</td>\n",
+              "      <td>googleadwords_int</td>\n",
+              "      <td>29 days 19:29:10.537000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>350512</th>\n",
+              "      <td>de14cef1f693ed124d1ac58b38a88ebe835b7dd1752cf2...</td>\n",
+              "      <td>2d10f2ac-7883-42aa-8d30-d9c4c548cdca</td>\n",
+              "      <td>2019-09-01_2305c8c3-3784-386f-8960-6a129ca1716d</td>\n",
+              "      <td>ANDROID</td>\n",
+              "      <td>de14cef1f693ed124d1ac58b38a88ebe835b7dd1752cf2...</td>\n",
+              "      <td>2018114a-d02d-48ca-97b4-5a2ab286f9dd</td>\n",
+              "      <td>2019-09-01T00:17:12.012Z</td>\n",
+              "      <td>2019-09-28T23:44:19.234Z</td>\n",
+              "      <td>2019-09-01 03:17:12.012000+00:00</td>\n",
+              "      <td>2019-09-29 02:44:19.234000+00:00</td>\n",
+              "      <td>2417227.00</td>\n",
+              "      <td>Redmi 7</td>\n",
+              "      <td>Xiaomi</td>\n",
+              "      <td>13.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>2.00</td>\n",
+              "      <td>10.00</td>\n",
+              "      <td>4.00</td>\n",
+              "      <td>1.00</td>\n",
+              "      <td>super categories bebidas</td>\n",
+              "      <td>Facebook Ads</td>\n",
+              "      <td>27 days 23:27:07.222000</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                                                unique_id  ...            tempo_sessao\n",
+              "351470  503d295dbeef80d0169bc59bd4ea87f9f9a7689b9cb4b3...  ... 29 days 19:29:10.537000\n",
+              "350512  de14cef1f693ed124d1ac58b38a88ebe835b7dd1752cf2...  ... 27 days 23:27:07.222000\n",
+              "\n",
+              "[2 rows x 23 columns]"
+            ]
+          },
+          "execution_count": 262,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "# df_final poderá utilizado no próximo exercício.\n",
+        "df_final = recuperar_n_mais_usuarios_ativos(df_session=df_session_visits, n_mais_usuarios=1000)\n",
+        "df_final.head(2)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "JZBk0mL-1Cj-"
+      },
+      "source": [
+        "**<span style=\"color:blue\">(5 pontos)</span> `Q13` Utilizando qualquer um dos quatro DataFrames (`df_customer_segmentation`, `df_orders`, `df_session_visits` ou `df_final`), crie os seguintes gráficos:**\n",
+        "\n",
+        "* Histograma\n",
+        "* Gráfico de dispersão\n",
+        "* Gráfico de barras\n",
+        "* Box-plot\n",
+        "\n",
+        "Para cada um dos gráficos, faça uma análise da visualização obtida."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "4plbH3xq2Bhp"
+      },
+      "source": [
+        "**Histograma**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "G_Uw2YSPH0zk"
+      },
+      "outputs": [],
+      "source": [
+        "import matplotlib.pyplot as plt"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 295
+        },
+        "id": "Z-7Dofr01Cj-",
+        "outputId": "5275d202-52d2-477a-fe9b-b4d968d0520a"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "<matplotlib.axes._subplots.AxesSubplot at 0x7fa7a5ce0b90>"
+            ]
+          },
+          "execution_count": 264,
+          "metadata": {},
+          "output_type": "execute_result"
+        },
+        {
+          "data": {
+            "image/png": "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\n",
+            "text/plain": [
+              "<Figure size 432x288 with 1 Axes>"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ],
+      "source": [
+        "df_final.session_duration_seconds.plot.hist()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "Rk9C1olMKNq0"
+      },
+      "outputs": [],
+      "source": [
+        ""
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "duoM39hG2Hn9"
+      },
+      "source": [
+        "**Gráfico de dispersão**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "background_save": true,
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "P9u66VeD06Uc",
+        "outputId": "ef9b0f77-474a-46f8-c1fa-aef43d5fa125"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "<matplotlib.axes._subplots.AxesSubplot at 0x7fa7a5ce75d0>"
+            ]
+          },
+          "execution_count": null,
+          "metadata": {},
+          "output_type": "execute_result"
+        },
+        {
+          "data": {
+            "image/png": "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\n",
+            "text/plain": [
+              "<Figure size 432x288 with 1 Axes>"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ],
+      "source": [
+        "df_orders.plot(x ='order_lag_at_login', y='distance_merchant_customer', kind='scatter')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "background_save": true
+        },
+        "id": "wzFxJNhwNgSD"
+      },
+      "outputs": [],
+      "source": [
+        "#Podemos notar que a distancia entre o cliente e o restaurante, não afeta na frequencia do pedido ou seja, o frete e o tempo de entrega não afeta os pedidos."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "fDDal8x32Kda"
+      },
+      "source": [
+        "**Gráfico de barras**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "background_save": true
+        },
+        "id": "sE9RgLNz3ZgH",
+        "outputId": "19df2141-64d0-40c9-cdf0-c767ff9ce6e0"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "<matplotlib.axes._subplots.AxesSubplot at 0x7fa7a5c67d90>"
+            ]
+          },
+          "execution_count": null,
+          "metadata": {},
+          "output_type": "execute_result"
+        },
+        {
+          "data": {
+            "image/png": "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\n",
+            "text/plain": [
+              "<Figure size 432x288 with 1 Axes>"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ],
+      "source": [
+        "df_final.platform.hist()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "background_save": true
+        },
+        "id": "HAyxDEhhSdAw"
+      },
+      "outputs": [],
+      "source": [
+        "#Notamos que temos quase 2 vezes mais usuarios da plataforma Android do que IOS."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "VU2Y1_Xu2N9a"
+      },
+      "source": [
+        "**Box-plot**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "background_save": true
+        },
+        "id": "RvRuRHyT1rMl",
+        "outputId": "f12974ed-2226-448b-fe3c-0a5d14df9721"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "<matplotlib.axes._subplots.AxesSubplot at 0x7fa7a5bdddd0>"
+            ]
+          },
+          "execution_count": null,
+          "metadata": {},
+          "output_type": "execute_result"
+        },
+        {
+          "data": {
+            "image/png": "iVBORw0KGgoAAAANSUhEUgAAAXQAAAEECAYAAAA4Qc+SAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4yLjIsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy+WH4yJAAAcjElEQVR4nO3dfXRV9Z3v8fc3DwQKlEdvihGkyypNbli1NZe2ym0To6U4vZE1Mpem1F5rLMUWOjO3OjiNq512lbXEGVwXsVOFhraOTOpcrZnYYvGBpBTog0ARYzK1PiCmckeEgB4eAiTf+8f5kZ7EQHYwyc45fl5rnXXO+e199v4mHj/58du/vbe5OyIikv6y4i5AREQGhgJdRCRDKNBFRDKEAl1EJEMo0EVEMoQCXUQkQ8Qa6Ga2zsxeN7OmiOv/TzNrNrPnzOxfB7s+EZF0YnHOQzezTwAJ4H53L+5j3YuBfwOudPc2M/sv7v76UNQpIpIOYu2hu/tm4GBqm5ldZGa/MLMdZvYrM/tgWPQl4Hvu3hY+qzAXEUkxHMfQ1wBL3f0y4Bbgn0P7JcAlZrbVzH5jZp+OrUIRkWEoJ+4CUpnZGOBy4P+a2enmvPCcA1wMlAIXAJvNbKa7HxrqOkVEhqNhFegk/8VwyN0v7WVZK/Bbdz8JvGxmz5MM+KeHskARkeFqWA25uPubJMP6rwAs6UNhcR3J3jlmNpnkEMxLcdQpIjIcxT1tsRb4NTDDzFrNrApYCFSZ2TPAc8C1YfWNwAEzawYagFvd/UAcdYuIDEexTlsUEZGBM6yGXERE5NzFdlB08uTJPn369Lh2L3JWR44cYfTo0XGXIfI2O3bseMPdz+ttWWyBPn36dLZv3x7X7kXOqrGxkdLS0rjLEHkbM3vlTMs05CIikiEU6CIiGUKBLiKSIRToIiIZQoEuIpIhFOgiKWpraykuLqa8vJzi4mJqa2vjLkkksuF2cS6R2NTW1lJdXU1NTQ0dHR1kZ2dTVVUFQGVlZczVifRNPXSRYPny5dTU1FBWVkZOTg5lZWXU1NSwfPnyuEsTiUSBLhK0tLQwe/bsbm2zZ8+mpaUlpopE+keBLhIUFhayZcuWbm1btmyhsLAwpopE+keBLhJUV1dTVVVFQ0MDp06doqGhgaqqKqqrq+MuTSSSPg+KmtlU4H4gH3Bgjbuv6rFOKfDvwMuh6afu/p2BLVVkcJ0+8Ll06VJaWlooLCxk+fLlOiAqaaPP66Gb2RRgirvvNLOxwA5gnrs3p6xTCtzi7p+JuuOSkhLXxblkuNLFuWS4MrMd7l7S27I+h1zcfZ+77wyv3wJagIKBLVFERN6pfs1DN7PpwIeB3/ay+OPhtnGvkeytP9fL5xcBiwDy8/NpbGzsZ7kiQyORSOj7KWkn8i3ozGwM8Etgubv/tMey9wKd7p4ws2uAVe5+8dm2pyEXGc405CLD1TsacgkbyAUeBtb3DHMAd3/T3RPh9QYg18wmv4OaRUSkn/oMdDMzoAZocfe7zrDO+8J6mNmssN0DA1moiIicXZQe+hXA9cCVZrYrPK4xs8VmtjisMx9oCmPodwOf9ahjOSLDyJw5c8jKyqKsrIysrCzmzJkTd0kikfV5UNTdtwDWxzr3APcMVFEicZgzZw6PP/44N998M9dccw0bNmzg+9//PnPmzGHjxo1xlyfSp8gHRQeaDorKcJOVlUV5eTn79u3rOrFoypQpPPXUU3R2dsZdnghw9oOiunyuSODu/PGPf+SHP/xh1+Vzv/jFL6LRQ0kXCnSRFJMmTep26v+kSZN45ZVX4i5LJBJdnEskxc6dO7nooot4+OGHueiii9i5c2fcJYlEph66SJCXl8eECROor6+nvr4egPe97320tbXFXJlINAp0kaC9vZ033niDlStXUlRURHNzM8uWLePUqVNxlyYSiQJdJMjLy2P+/PmsW7euawx9wYIFPPTQQ3GXJhKJAl0kOHHiBFu3bmXdunVds1xuvPFGTpw4EXdpIpEo0EWCoqIi5s2b122Wy8KFC6mrq4u7NJFIFOgiQXV1NdXV1dTU1HT10Kuqqli+fHncpYlEokAXCXQLOkl3mocuIpIh1EMXCWpra3sdcgHUS5e0oB66SLB8+XJqamooKysjJyeHsrIyampqNIYuaUOBLhK0tLQwe/bsbm2zZ8+mpaUlpopE+keBLhIUFhayZcuWbm1btmyhsLAwpopE+keBLhJUV1dTVVVFQ0MDp06doqGhgaqqKqqrq+MuTSQSHRQVCSorK9m2bRtz586lvb2dvLw8vvSlL+mAqKQNBbpIUFtby89//nMee+yxbrNcLr/8coW6pAUNuYgEmuUi6U6BLhJoloukOw25iASFhYV8+9vfpq6uruvU/3nz5mmWi6QNBbpIUFZWxooVK1ixYkW3G1wsXrw47tJEIlGgiwQNDQ0sW7as2w0uli1bpsvnStrQGLpI0NLSwowZM7q1zZgxQ2PokjbM3WPZcUlJiW/fvj2WfYv0ZurUqRw8eJCTJ09y8uRJcnNzyc3NZeLEibz66qtxlycCgJntcPeS3paphy4StLW1cfToUW666SYeffRRbrrpJo4ePUpbW1vcpYlEokAXCY4cOUJlZSWbN2/m2muvZfPmzVRWVnLkyJG4SxOJRIEukuL666+nqamJp556iqamJq6//vq4SxKJTIEuEuTk5LBw4cJuF+dauHAhOTmaDCbpoc9AN7OpZtZgZs1m9pyZ/XUv65iZ3W1mL5jZbjP7yOCUKzJ4Fi9ezOHDh6msrOTqq6+msrKSw4cPax66pI0oXY9TwNfdfaeZjQV2mNkT7t6css5c4OLw+Cjw/fAskjZWr14NwNq1awE4dOgQX/nKV7raRYa7Pnvo7r7P3XeG128BLUBBj9WuBe73pN8A481syoBXKzLIVq9ezfHjx2loaOD48eMKc0kr/RocNLPpwIeB3/ZYVACkTtRtDW37enx+EbAIID8/n8bGxn4VKzLYnnrqKR544AH27t3LtGnT+PznP095eXncZYlEEjnQzWwM8DDwN+7+5rnszN3XAGsgeWJRaWnpuWxGZFDU1tayfv161q1b1+166EVFRboeuqSFSLNczCyXZJivd/ef9rLKn4CpKe8vCG0iaUPXQ5d0F2WWiwE1QIu733WG1eqBL4TZLh8DDrv7vjOsKzIs6Xroku6i9NCvAK4HrjSzXeFxjZktNrPT87k2AC8BLwBrga8MTrkig6ewsJAtW7Z0a9uyZYuuhy5po88xdHffAlgf6zjw1YEqSiQO1dXVLFiwgNGjR3cdFD1y5AirVq2KuzSRSHSmqEgv4roKqcg7oUAXCZYvX86DDz7Iyy+/zKZNm3j55Zd58MEHdVBU0oYCXSRoaWmhtbWV4uJiysvLKS4uprW1VQdFJW3oqkMiwfnnn8+yZctYv3591zz0hQsXcv7558ddmkgk6qGLpOg5dq6xdEkn6qGLBK+99hpXXnkl5eXluDtmRnl5OZs2bYq7NJFI1EMXCcaPH8+TTz7Z1St3d5588knGjx8fc2Ui0SjQRYKDBw8CUFFRwSOPPEJFRUW3dpHhToEukqK0tJQXX3yR6667jhdffBFdQE7SiQJdJMVVV13V7Z6iV111VdwliUSmg6IiKW6//XZGjRpFUVERd911F7fffnvcJYlEpkAXCT71qU/x+OOPc+utt9LZ2UlWVlZXu0g60JCLSLBx40ZmzpxJZ2cnAJ2dncycOZONGzfGXJlINAp0kaC2tpZEIsGmTZt44okn2LRpE4lEgtra2rhLE4nE4joTrqSkxLdv3x7LvkV6U1xczLx586irq6OlpYXCwsKu901NTXGXJwKAme1w95LelmkMXSRobm7m6NGj1NTUdLun6J49e+IuTSQSDbmIBCNGjGDJkiXd7im6ZMkSRowYEXdpIpGohy4SnDhxgtWrV/PhD3+Yjo4OGhoaWL16NSdOnIi7NJFIFOgiQVFREfPmzWPp0qVdY+gLFy6krq4u7tJEIlGgiwTV1dV8+ctf5vjx43R2dvL8889z9913c99998VdmkgkGkMXCbZt20Yikeg2Dz2RSLBt27aYKxOJRtMWRYLc3Fzy8vI477zz2Lt3L9OmTWP//v20t7dz8uTJuMsTATRtUSSSU6dOMXnyZNatW9c1bfFzn/scR44cibs0kUg05CKSoqKiotu0xdPXRBdJB+qhi6RYu3YtM2bM6Lra4tq1a+MuSSQyBbpIcMEFF3Dw4EFuu+02Tp48SW5uLqNGjWLixIlxlyYSiYZcRII777yT0aNHU1BQgJlRUFDA6NGjufPOO+MuTSQSBbpIUFlZyapVqxg9ejRmxujRo1m1ahWVlZVxlyYSiaYtivSisbFR9xOVYels0xbVQxcRyRB9BrqZrTOz182s1wtCm1mpmR02s13h8c2BL1NERPoSZZbLj4B7gPvPss6v3P0zA1KRiIickz576O6+GTg4BLWIiMg7MFDz0D9uZs8ArwG3uPtzva1kZouARQD5+fk0NjYO0O5FBlYikdD3U9JOpFkuZjYd+Jm7F/ey7L1Ap7snzOwaYJW7X9zXNjXLRYYzzXKR4WpQZ7m4+5vungivNwC5Zjb5nW5XRET65x0Hupm9z8wsvJ4VtnngnW5XRET6p88xdDOrBUqByWbWCnwLyAVw93uB+cDNZnYKOAZ81uM6W0lE5F2sz0B397Oe9+zu95Cc1igiIjHSmaIiIhlCgS4ikiEU6CIiGUKBLiKSIRToIiIZQoEuIpIhFOgiIhlCgS6Sora2luLiYsrLyykuLqa2tjbukkQiG6irLYqkvdraWqqrq6mpqaGjo4Ps7GyqqqoAdF9RSQu6p6hIUFxczLx586irq6OlpYXCwsKu901Nvd6wS2TIne1qi+qhiwTNzc0cPXr0bT30PXv2xF2aSCQaQxcJRowYwZIlSygrKyMnJ4eysjKWLFnCiBEj4i5NJBINuYgEWVlZTJo0iTFjxrB3716mTZtGIpHgwIEDdHZ2xl2eCKAhF5FICgoK2LdvH2+88QYAe/bsITs7m4KCgpgrE4lGQy4iwf79++no6OjW1tHRwf79+2OqSKR/FOgiQXt7OwBjxozp9ny6XWS4U6CLpJg1axZvvfUWDQ0NvPXWW8yaNSvukkQi0xi6SIrdu3fT0NBAR0cHDQ0N7N69O+6SRCJToIukOH78ONdddx1tbW1MmDCB48ePx12SSGQachEJZs6cCUBbW1u359PtIsOdAl0k2L17NxMnTuzWNnHiRA27SNpQoIsES5cu5c0332TlypU89thjrFy5kjfffJOlS5fGXZpIJDpTVCQYOXIk8+fPZ9euXV0X57r00kt56KGHNJYuw4bOFBWJoL29na1bt7Ju3bqui3PdeOONmocuaUNDLiKBmTF37txuF+eaO3cuZhZ3aSKRqIcukmLNmjV84AMfoKioiLvuuos1a9bEXZJIZAp0kaCoqIhRo0Zxyy234O6YGZdddhnHjh2LuzSRSDTkIhKUlZWxc+dO8vPzycrKIj8/n507d1JWVhZ3aSKRKNBFgrq6OkaOHNl1/fMDBw4wcuRI6urq4i5NJJI+A93M1pnZ62bW600VLeluM3vBzHab2UcGvkyRwdfa2kpubi4FBQVkZWVRUFBAbm4ura2tcZcmEkmUMfQfAfcA959h+Vzg4vD4KPD98CySdrKzs7tNW5w/f37cJYlE1mcP3d03AwfPssq1wP2e9BtgvJlNGagCRYZSzxPt4jrxTuRcDMQslwLg1ZT3raFt3wBsW2RIHT9+nDlz5nDy5Elyc3PJydFEMEkfQ/ptNbNFwCKA/Px8Ghsbh3L3Imc1duxYEokE48ePp62tjTFjxnDo0CHGjh2r76qkhYEI9D8BU1PeXxDa3sbd1wBrIHktl9LS0gHYvcjAGDduHIlEotvlc82McePGoe+qpIOBmLZYD3whzHb5GHDY3TXcImmntbUVdycrK/m/RVZWFu6uWS6SNqJMW6wFfg3MMLNWM6sys8VmtjissgF4CXgBWAt8ZdCqFRlkOTk5TJs2jaysLKZNm6YxdEkrfX5b3b2yj+UOfHXAKhKJUWdnJ0uXLqWoqIjm5mZuvfXWuEsSiUzdD5EUkydP5hvf+Abt7e3k5eUxefJkXn/99bjLEolEgS6S4vXXX++6XO6JEycU5pJWdC0XkeB0kJ8+mej0s66HLulCgS4S9AzwngEvMtwp0EVSmFm3Hrp655JOFOgiKdydm2++mUcffZSbb75ZvXNJKxbXF7akpMS3b98ey75FenO23riCXYYLM9vh7iW9LVMPXUQkQyjQRUQyhAJdRCRDKNBFRDKEAl2kh4qKCh555BEqKiriLkWkX3Tqv0iKwsJCNm7cSH19PXl5eRQWFtLS0hJ3WSKRqIcukmLPnj1MmTKFrKwspkyZwp49e+IuSSQy9dBFAjPj2LFj7N27l87Ozq5nnS0q6UI9dJHgPe95D5C8Jnrq8+l2keFOgS4SHDlypF/tIsONAl1EJEMo0EV6SL1JtEg60TdWRCRDKNBFeuh5UFQkXSjQRUQyhAJdRCRDKNBFRDKEAl1EJEMo0EV6yM7O7vYski4U6CI9dHR0dHsWSRcKdBGRDKFAFxHJEAp0EZEMESnQzezTZvYHM3vBzG7rZfkNZrbfzHaFx00DX6rI4DMzVq5cyWOPPcbKlSt1LXRJK33e4MLMsoHvAVcDrcDTZlbv7s09Vn3Q3ZcMQo0iQ2bkyJGsXr2aV155hQsvvJCRI0dy7NixuMsSiSTKHYtmAS+4+0sAZvYT4FqgZ6CLDEv96WUfO3as67Zzqbefi7INd+9vaSIDKkqgFwCvprxvBT7ay3rXmdkngOeBv3X3V3uuYGaLgEUA+fn5NDY29rtgkf5qaGiItF5FRQWJRILx48fT1tbGhAkTOHToEGPGjKG+vr7Pz+v7LHEbqHuKPgrUunu7mX0Z+DFwZc+V3H0NsAagpKTES0tLB2j3Iu/cfffdx+LFi0kkEgAkEgnGjh3Lvffei76rkg6iHBT9EzA15f0Foa2Lux9w9/bw9gfAZQNTnsjQqays5N577+WSSy4By+KSSy7h3nvvpbKyMu7SRCKJEuhPAxeb2fvNbATwWaDbvz/NbErK2wqgZeBKFBk6lZWVNDU1ceHf1dPU1KQwl7TS55CLu58ysyXARiAbWOfuz5nZd4Dt7l4PfM3MKoBTwEHghkGsWUREehFpDN3dNwAberR9M+X13wN/P7CliYhIf+hMURGRDKFAFxHJEAp0EZEMoUAXEckQCnQRkQyhQBcRyRAKdBGRDKFAFxHJEAp0EZEMoUAXEckQCnQRkQyhQBcRyRAKdBGRDKFAFxHJEAp0EZEMMVD3FBUZEh/69uMcPnZySPY1/bafD+r2x43K5ZlvfWpQ9yHvLgp0SSuHj51kzx1/Mej7aWxsHPQbQw/2Hwx599GQi4hIhlCgi4hkCAW6iEiGUKCLiGQIBbqISIZQoIuIZAgFuohIhlCgi4hkCAW6iEiGUKCLiGQInfovaWVs4W3M/PFtQ7OzHw/u5scWAgz+ZQzk3UOBLmnlrZY7dC0XkTPQkIuISIaI1EM3s08Dq4Bs4AfufkeP5XnA/cBlwAFggbvvGdhSRZKGrGf7i8G/fK7IQOoz0M0sG/gecDXQCjxtZvXu3pyyWhXQ5u4fMLPPAiuABYNRsLy7nctwi5kNQiVv5+5Dsh+RM4ky5DILeMHdX3L3E8BPgGt7rHMtfz6E9BBQbkP1f5FIH9y934+GhoZ+f0YkblGGXAqAV1PetwIfPdM67n7KzA4Dk4A3Ulcys0XAIoD8/HwaGxvPrWqRQZZIJPT9lLQzpLNc3H0NsAagpKTEB3sWgci5GopZLiIDLcqQy5+AqSnvLwhtva5jZjnAOJIHR0VEZIhECfSngYvN7P1mNgL4LFDfY5164H+F1/OBTa5BRRGRIdXnkEsYE18CbCQ5bXGduz9nZt8Btrt7PVAD/IuZvQAcJBn6IiIyhCKNobv7BmBDj7Zvprw+DvzVwJYmIiL9oTNFRUQyhAJdRCRDWFzHLs1sP/BKLDsX6dtkepxHITJMXOju5/W2ILZAFxnOzGy7u5fEXYdIf2jIRUQkQyjQRUQyhAJdpHdr4i5ApL80hi4ikiHUQxcRyRAKdBGRDKFAFxHJEAp0GRJmdr6ZPTSI27/BzO4ZwO19o8f7bQO17eHCzBJx1yADS4EuQ8LdX3P3+XHXcVq4bv/ZdAt0d798EMsRGRAKdHkbMxttZj83s2fMrMnMFpjZZWb2SzPbYWYbzWxKWPdrZtZsZrvN7Ceh7ZNmtis8fm9mY81supk1heUjzeyHZvZsWF4W2m8ws5+a2S/M7I9mdmcfdX7RzJ43s98BV6S0/8jM5qe8T4TnUjP7lZnVA82hrS78TM+FWyRiZncAo0L963tsw8zsH8Pv5VkzW5Cy7UYze8jM/sPM1p/tvrpmdkfK7+2fQtt5ZvawmT0dHleE9jEpv6/dZnZdaK8MbU1mtiL15zWz5eG/32/MLD+0v9/Mfh0+892U9aeY2ebw8zaZ2X8/2+9dhrFzuYGuHpn9AK4D1qa8HwdsA84L7xeQvC4+wGtAXng9Pjw/ClwRXo8heZnm6UBTaPt6yuc/COwFRgI3AC+F/Y0kea2fqWeocUr43HnACGArcE9Y9iNgfsq6ifBcChwB3p+ybGJ4HgU0AZNSP9PLNq4DniB5b4D8UMOUsO3DJO/olQX8Gph9htonAX/gz9OGT//e/vX0Z4BpQEt4vQL4PymfnwCcn/Lz5wCbgHlhuQP/I7y+E7g9vK4HvhBefzXlZ/o6UB1eZwNj4/4O6nFuD/XQpTfPAleb2YrQW5sKFANPmNku4HaSwQWwG1hvZp8HToW2rcBdZvY1kmF1qvvmmQ08AODu/0EyuC8Jy55y98OevMZ+M3DhGWr8KNDo7vvd/QTwYMSf7Xfu/nLK+6+Z2TPAb8LPeXEfn58N1Lp7h7v/J/BL4L+lbLvV3TuBXST/iPXmMHAcqDGzvwSOhvargHvC77geeK+ZjQnt3zv9YXdvC/s8/fOfAtYDnwirnAB+Fl7vSKnjCqA2vP6XlHqeBr5oZv8AzHT3t/r4HcgwpUCXt3H354GPkAz275LslT7n7peGx0x3/1RY/S9Ihs1HgKfNLMfd7wBuItnr3WpmH+zH7ttTXndwbjcyP0X4bptZFske/GlHTr8ws1KSYflxd/8Q8HuS/zI4V5FqDwE8C3gI+Azwi7AoC/hYyu+5wN3P5cDlSXc/fcZgzzrediahu28m+cfgT8CPzOwL57BPGQYU6PI2ZnY+cNTdHwD+kWRv+Dwz+3hYnmtm/zWE5VR3bwCWkRwqGWNmF7n7s+6+gmTvr2eg/wpYGLZ1CcnhhT/0s8zfAp80s0lmlkv3O2btAS4LryuA3DNsYxzQ5u5Hwx+dj6UsOxm229OvgAVmlm1m55EMwt/1p/DQ6x7nyTuB/S3wobDocWBpynqXhpdPkBwiOd0+Iezzk2Y22cyygUqS/1o4m638+faQC1O2dyHwn+6+FvgByT/OkoYU6NKbmcDvwj/9vwV8k+TNv1eE4YldwOUkx1sfMLNnSfZu73b3Q8DfhINru4GTwGM9tv/PQFb43IPADe7eTj+4+z7gH0iOVW8FWlIWryUZds8AHyelV97DL4AcM2sB7iA57HLaGmD36YOiKR4hOcz0DMlx679z9//Xn9qBscDPwu9nC/C/Q/vXgJJw4LMZWBzavwtMCL/TZ4Cy8PPfBjSEWna4+7/3sd+/Br4afu8FKe2lwDNm9nuSx0dW9fPnkWFC13IREckQ6qGLiGSIczngJDKkzOy3QF6P5uvd/dk46ukPM3sEeH+P5mXuvjGOeiSzachFRCRDaMhFRCRDKNBFRDKEAl1EJEMo0EVEMsT/B8QZAqTlT0aiAAAAAElFTkSuQmCC\n",
+            "text/plain": [
+              "<Figure size 432x288 with 1 Axes>"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ],
+      "source": [
+        "df_final.boxplot(column = 'session_duration_seconds')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "background_save": true
+        },
+        "id": "rBqemT-yRnS3",
+        "outputId": "cbab278d-c2b8-4671-ef30-5461fb59fe19"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "count      1000.00\n",
+              "mean     227138.10\n",
+              "std      378890.26\n",
+              "min       28557.00\n",
+              "25%       44977.25\n",
+              "50%       77864.50\n",
+              "75%      235720.00\n",
+              "max     2575751.00\n",
+              "Name: session_duration_seconds, dtype: float64"
+            ]
+          },
+          "execution_count": null,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "df_final.session_duration_seconds.describe()\n",
+        "#Podemos identificar diversos outliers, que podem ser usuários que esquecem os aplicativos ligados e fazem outras atividades."
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "collapsed_sections": [],
+      "name": "aula5-projeto-parte1-exercicios.ipynb",
+      "provenance": []
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.7.8"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
